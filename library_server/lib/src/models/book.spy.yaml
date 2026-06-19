@@ -1,0 +1,11 @@
+class: Book
+table: book
+fields:
+  title: String
+  author: String
+  description: String
+  imageUrl: String?
+  isAvailableOnline: bool
+  isAvailableOffline: bool
+  pdfUrl: String?
+  category: Category?, relation

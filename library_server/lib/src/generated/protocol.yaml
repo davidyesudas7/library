@@ -1,0 +1,13 @@
+book:
+  - getAll:
+  - getByCategory:
+  - create:
+  - update:
+  - delete:
+category:
+  - getAll:
+  - create:
+  - update:
+  - delete:
+seed:
+  - seedDatabase:

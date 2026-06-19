@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Manage Catalog | Academia Library</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .diamond-separator::after {
+            content: '◆';
+            font-size: 8px;
+            color: #B89650;
+            margin: 0 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c6c7c0;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                "inverse-surface": "#30312e",
+                "surface-container": "#efeeea",
+                "on-primary-fixed-variant": "#454743",
+                "secondary-fixed": "#dae7c3",
+                "surface-variant": "#e4e2de",
+                "secondary": "#576246",
+                "surface-dim": "#dbdad6",
+                "on-tertiary-container": "#b1904a",
+                "on-secondary-fixed-variant": "#3f4a30",
+                "secondary-fixed-dim": "#becba9",
+                "on-tertiary": "#ffffff",
+                "outline": "#767872",
+                "background": "#fbf9f5",
+                "outline-variant": "#c6c7c0",
+                "inverse-primary": "#c6c7c1",
+                "on-background": "#1b1c1a",
+                "tertiary-container": "#3c2a00",
+                "primary-fixed": "#e3e3dd",
+                "on-error-container": "#93000a",
+                "on-secondary": "#ffffff",
+                "surface": "#fbf9f5",
+                "on-secondary-container": "#5b674a",
+                "on-surface": "#1b1c1a",
+                "on-primary-fixed": "#1a1c19",
+                "surface-container-low": "#f5f3ef",
+                "primary-container": "#2c2e2a",
+                "on-primary": "#ffffff",
+                "error": "#ba1a1a",
+                "on-tertiary-fixed": "#261900",
+                "surface-container-high": "#eae8e4",
+                "primary": "#171916",
+                "on-error": "#ffffff",
+                "secondary-container": "#d7e5c1",
+                "tertiary": "#221700",
+                "on-secondary-fixed": "#151e08",
+                "error-container": "#ffdad6",
+                "primary-fixed-dim": "#c6c7c1",
+                "on-tertiary-fixed-variant": "#5c4301",
+                "surface-bright": "#fbf9f5",
+                "tertiary-fixed-dim": "#e7c177",
+                "surface-tint": "#5d5f5a",
+                "on-primary-container": "#949590",
+                "tertiary-fixed": "#ffdea1",
+                "on-surface-variant": "#454842",
+                "inverse-on-surface": "#f2f0ed",
+                "surface-container-lowest": "#ffffff",
+                "surface-container-highest": "#e4e2de"
+              },
+              "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+              },
+              "spacing": {
+                "sm": "8px",
+                "xxl": "64px",
+                "margin-mobile": "16px",
+                "gutter": "20px",
+                "margin-desktop": "48px",
+                "lg": "24px",
+                "md": "16px",
+                "xl": "40px",
+                "unit": "4px",
+                "xs": "4px"
+              },
+              "fontFamily": {
+                "body-lg": ["Hanken Grotesk"],
+                "label-caps": ["Hanken Grotesk"],
+                "headline-lg": ["EB Garamond"],
+                "headline-lg-mobile": ["EB Garamond"],
+                "display-lg": ["EB Garamond"],
+                "headline-md": ["EB Garamond"],
+                "title-lg": ["Hanken Grotesk"],
+                "body-md": ["Hanken Grotesk"]
+              },
+              "fontSize": {
+                "body-lg": ["16px", { "lineHeight": "26px", "fontWeight": "400" }],
+                "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "700" }],
+                "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "500" }],
+                "headline-lg-mobile": ["28px", { "lineHeight": "34px", "fontWeight": "500" }],
+                "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+                "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
+                "title-lg": ["18px", { "lineHeight": "24px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-lg min-h-screen flex flex-col md:flex-row overflow-x-hidden">
+<!-- SideNavBar (Desktop Only) -->
+<aside class="hidden md:flex flex-col h-full w-[280px] fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant/50 p-md space-y-lg z-30">
+<div class="flex items-center gap-md mb-xl">
+<div class="w-10 h-10 bg-primary flex items-center justify-center rounded-sm">
+<span class="material-symbols-outlined text-on-primary">library_books</span>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-primary leading-tight">Categories</h2>
+<p class="font-body-md text-body-md text-on-surface-variant opacity-70">Browse by discipline</p>
+</div>
+</div>
+<nav class="flex-grow space-y-1">
+<a class="flex items-center gap-md bg-secondary-container text-on-secondary-container font-bold rounded-lg px-md py-sm hover:translate-x-1 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">palette</span>
+<span class="font-body-md">Art History</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant hover:bg-surface-container-high rounded-lg px-md py-sm hover:translate-x-1 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">history_edu</span>
+<span class="font-body-md">Philosophy</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant hover:bg-surface-container-high rounded-lg px-md py-sm hover:translate-x-1 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">science</span>
+<span class="font-body-md">Science</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant hover:bg-surface-container-high rounded-lg px-md py-sm hover:translate-x-1 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-body-md">Literature</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant hover:bg-surface-container-high rounded-lg px-md py-sm hover:translate-x-1 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">auto_stories</span>
+<span class="font-body-md">Rare Manuscripts</span>
+</a>
+</nav>
+<button class="w-full py-md bg-primary text-on-primary font-label-caps text-label-caps tracking-widest hover:opacity-90 transition-opacity uppercase mb-lg">
+            Request Access
+        </button>
+<div class="pt-xl border-t border-outline-variant/30">
+<a class="flex items-center gap-md text-on-surface-variant hover:text-primary mb-md transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-md">Help Center</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">mail</span>
+<span class="font-body-md">Contact Archive</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-grow md:ml-[280px] relative pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-20 bg-background/80 backdrop-blur-md border-b border-outline-variant/30 px-margin-mobile md:px-margin-desktop py-4 flex justify-between items-center w-full">
+<div class="flex items-center gap-4">
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary">Academia Library</h1>
+</div>
+<div class="hidden lg:flex items-center gap-xl">
+<nav class="flex gap-lg">
+<a class="font-label-caps text-label-caps text-primary font-bold border-b-2 border-tertiary-container pb-1 active:scale-95 transition-all" href="#">Explore</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">New for You</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant font-medium hover:text-primary transition-colors" href="#">Sort By</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<button class="material-symbols-outlined text-primary hover:scale-110 transition-transform">account_circle</button>
+<button class="md:hidden material-symbols-outlined text-primary" onclick="toggleMobileMenu()">menu</button>
+</div>
+</header>
+<!-- Catalog Header -->
+<div class="px-margin-mobile md:px-margin-desktop py-xl">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-md mb-xl">
+<div>
+<h2 class="font-display-lg text-display-lg text-primary mb-2">Manage Catalog</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Curate the collective wisdom of ages. Organize, expand, and maintain the archive's structural integrity.</p>
+</div>
+<div class="flex gap-4">
+<button class="px-lg py-sm font-label-caps text-label-caps border-b-2 border-primary text-primary transition-all" id="tab-btn-categories" onclick="switchTab('categories')">Categories</button>
+<button class="px-lg py-sm font-label-caps text-label-caps border-b-2 border-transparent text-on-surface-variant hover:text-primary transition-all" id="tab-btn-books" onclick="switchTab('books')">Books</button>
+</div>
+</div>
+<!-- Categories View -->
+<section class="space-y-lg animate-in fade-in duration-500" id="view-categories">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-headline-md text-headline-md text-primary">Existing Classifications</h3>
+<button class="flex items-center gap-2 bg-primary text-on-primary px-lg py-sm font-label-caps text-label-caps hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined text-sm">add</span> Add New Category
+                    </button>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant shadow-sm overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container text-on-surface-variant font-label-caps text-label-caps">
+<tr>
+<th class="p-md border-b border-outline-variant">Category Name</th>
+<th class="p-md border-b border-outline-variant">Item Count</th>
+<th class="p-md border-b border-outline-variant">Last Updated</th>
+<th class="p-md border-b border-outline-variant text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md">
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="p-md border-b border-outline-variant/30 font-semibold text-primary">Art History</td>
+<td class="p-md border-b border-outline-variant/30">124 Volumes</td>
+<td class="p-md border-b border-outline-variant/30">Oct 12, 2023</td>
+<td class="p-md border-b border-outline-variant/30 text-right">
+<button class="text-secondary hover:text-primary p-2 transition-colors">Edit</button>
+<button class="text-error hover:text-red-700 p-2 transition-colors">Delete</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="p-md border-b border-outline-variant/30 font-semibold text-primary">Philosophy</td>
+<td class="p-md border-b border-outline-variant/30">312 Volumes</td>
+<td class="p-md border-b border-outline-variant/30">Nov 05, 2023</td>
+<td class="p-md border-b border-outline-variant/30 text-right">
+<button class="text-secondary hover:text-primary p-2 transition-colors">Edit</button>
+<button class="text-error hover:text-red-700 p-2 transition-colors">Delete</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="p-md border-b border-outline-variant/30 font-semibold text-primary">Science</td>
+<td class="p-md border-b border-outline-variant/30">89 Volumes</td>
+<td class="p-md border-b border-outline-variant/30">Dec 01, 2023</td>
+<td class="p-md border-b border-outline-variant/30 text-right">
+<button class="text-secondary hover:text-primary p-2 transition-colors">Edit</button>
+<button class="text-error hover:text-red-700 p-2 transition-colors">Delete</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="p-md border-b border-outline-variant/30 font-semibold text-primary">Literature</td>
+<td class="p-md border-b border-outline-variant/30">542 Volumes</td>
+<td class="p-md border-b border-outline-variant/30">Jan 20, 2024</td>
+<td class="p-md border-b border-outline-variant/30 text-right">
+<button class="text-secondary hover:text-primary p-2 transition-colors">Edit</button>
+<button class="text-error hover:text-red-700 p-2 transition-colors">Delete</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Books View -->
+<section class="hidden space-y-xl animate-in fade-in duration-500" id="view-books">
+<div class="flex flex-col md:flex-row justify-between md:items-center gap-md">
+<div class="relative w-full md:w-96">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant opacity-50">search</span>
+<input class="w-full bg-surface-container-low border-b border-outline-variant py-2 pl-10 pr-4 font-body-md focus:border-tertiary-container outline-none transition-all" placeholder="Search volumes..." type="text"/>
+</div>
+<button class="flex items-center justify-center gap-2 bg-primary text-on-primary px-xl py-sm font-label-caps text-label-caps hover:bg-primary-container transition-all active:scale-95 shadow-md" onclick="toggleModal(true)">
+<span class="material-symbols-outlined">add_box</span> Add New Book
+                    </button>
+</div>
+<!-- Book Group: Classical Literature -->
+<div>
+<div class="flex items-center gap-4 mb-lg">
+<h4 class="font-headline-md text-headline-md text-primary">Classical Literature</h4>
+<div class="h-px flex-grow bg-outline-variant/30"></div>
+<span class="font-label-caps text-label-caps text-on-surface-variant opacity-60 uppercase">Collection 01</span>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-gutter">
+<!-- Book Card 1 -->
+<div class="group bg-surface-container-lowest border border-outline-variant p-2 hover:shadow-lg transition-all duration-300">
+<div class="aspect-[2/3] overflow-hidden bg-surface-container mb-md relative">
+<img alt="The Iliad" class="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500" data-alt="A macro close-up of a vintage book cover for Homer's Iliad, featuring distressed leather textures and elegant gold-leaf embossing. The lighting is warm and cinematic, casting soft shadows that highlight the tactile quality of the aged parchment pages. The overall aesthetic is scholarly, authoritative, and deeply rooted in the Academic Excellence design system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLocSd9K_uxdbe3MC9fbZTueEV8YsCy1qvLhsLU80N_p8OTgLM_8OahYz_yviFkRpEWg5PcLVI91hbF9puYw90BkuoIpuhQ4EpIJWSHCWuy-LcBrbwIOnKvGo6RD_qQw2-Jr0TCWjndWQmZBbYDWRflCgFsfN_lLqzy5k6yKZDNh0O8X3cHEPYhB5rYKlg4Yh22GVPdlSjOCfi_ZvYN_pXD00hB_oybGHwr4J-TEAtan8DgQpfVMH4auqjpHCgueB8LUCukTvs6uQ"/>
+<div class="absolute top-2 right-2 bg-primary/80 text-on-primary text-[10px] px-2 py-0.5 font-label-caps backdrop-blur-sm">OFFLINE</div>
+</div>
+<div class="px-sm pb-sm">
+<h5 class="font-title-lg text-title-lg text-primary truncate">The Iliad</h5>
+<p class="font-body-md text-body-md text-secondary mb-2">Homer</p>
+<div class="border-t border-outline-variant/30 pt-2 flex justify-between items-center">
+<span class="font-label-caps text-[10px] text-on-surface-variant uppercase">Archive-ID: 442</span>
+<button class="material-symbols-outlined text-primary hover:text-tertiary-fixed-variant">more_vert</button>
+</div>
+</div>
+</div>
+<!-- Book Card 2 -->
+<div class="group bg-surface-container-lowest border border-outline-variant p-2 hover:shadow-lg transition-all duration-300">
+<div class="aspect-[2/3] overflow-hidden bg-surface-container mb-md relative">
+<img alt="The Republic" class="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500" data-alt="A minimalist and editorial book cover of Plato's Republic resting on a white marble surface. The cover features clean, modern typography and a subtle geometric illustration in charcoal and warm gold. The background is softly blurred to emphasize the crisp edges of the book, reflecting the timeless and intellectual nature of the library archive." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDy3UW8hf4apYURu505JaWoGdFYhxq7SOyjq0UK3XDBr9xNom_mawG61HhRwuBy-kYtmWxGpDcGtKd5nRZa5XwDG_IVCZGXKBS1qXu51J2vNuA_doOTfJfNdtKEQggWyI24ophzlwit8J3ttKUPUnZV1lNt1rt_3xlngK8Ouk-528f1ZgvpbC2zb7klFrF1kr3cwMq93IY4_NE__bMwma5CQbvp9B1lIFeVehNEIc3y5o-Y5H6oYws7wWiwv-seKeUOr1H7uT0RpBs"/>
+<div class="absolute top-2 right-2 bg-secondary/80 text-on-primary text-[10px] px-2 py-0.5 font-label-caps backdrop-blur-sm">ONLINE</div>
+</div>
+<div class="px-sm pb-sm">
+<h5 class="font-title-lg text-title-lg text-primary truncate">The Republic</h5>
+<p class="font-body-md text-body-md text-secondary mb-2">Plato</p>
+<div class="border-t border-outline-variant/30 pt-2 flex justify-between items-center">
+<span class="font-label-caps text-[10px] text-on-surface-variant uppercase">Archive-ID: 109</span>
+<button class="material-symbols-outlined text-primary hover:text-tertiary-fixed-variant">more_vert</button>
+</div>
+</div>
+</div>
+<!-- Book Card 3 -->
+<div class="group bg-surface-container-lowest border border-outline-variant p-2 hover:shadow-lg transition-all duration-300">
+<div class="aspect-[2/3] overflow-hidden bg-surface-container mb-md relative">
+<img alt="Metamorphoses" class="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500" data-alt="An ornate, historically inspired book cover for Ovid's Metamorphoses, showcasing delicate filigree patterns and deep olive-green leather. The image is captured from an angled perspective with a shallow depth of field, highlighting the exquisite craftsmanship and archival quality. The scene is illuminated by gentle, natural light coming from a nearby library window." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDY2NqfgQuUqe-h_fWoCf8EvzPBT7LlOxw45Yhg9tWicDfkZ5hWijj7e2ST-CB-VNkA3-quSbZWOsZz6_Hz-Qqx1Epy7wkOQIzfi5t9f4piarPG1-vRaLtwJqwBzgoGLknseoYFIRHnnszigCG59X1vwu-tNNFTXyCiATFnR0LLZjYh58iKzxfKay4ssW8WGVB_5baSvXvpi0WIqc5zLNen322akWVtNabM3Jr5baUoMvOfPCVLWLS4SOn64IL2b_jXx60iY9PXKrE"/>
+<div class="absolute top-2 right-2 bg-secondary/80 text-on-primary text-[10px] px-2 py-0.5 font-label-caps backdrop-blur-sm">ONLINE</div>
+</div>
+<div class="px-sm pb-sm">
+<h5 class="font-title-lg text-title-lg text-primary truncate">Metamorphoses</h5>
+<p class="font-body-md text-body-md text-secondary mb-2">Ovid</p>
+<div class="border-t border-outline-variant/30 pt-2 flex justify-between items-center">
+<span class="font-label-caps text-[10px] text-on-surface-variant uppercase">Archive-ID: 762</span>
+<button class="material-symbols-outlined text-primary hover:text-tertiary-fixed-variant">more_vert</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Footer -->
+<footer class="w-full py-xl px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-md bg-surface-container-highest border-t border-outline-variant text-on-surface-variant">
+<div class="flex flex-col items-center md:items-start">
+<span class="font-headline-md text-primary mb-2">Academia Library</span>
+<p class="font-body-md text-body-md opacity-70">© 2024 Academia Library. Preserving Knowledge for the Future.</p>
+</div>
+<nav class="flex gap-lg flex-wrap justify-center">
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-all hover:underline" href="#">Archives</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-all hover:underline" href="#">Lending Policy</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-all hover:underline" href="#">Terms of Service</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-all hover:underline" href="#">Donations</a>
+</nav>
+</footer>
+</main>
+<!-- Modal: Add New Book -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-md bg-black/40 backdrop-blur-sm hidden animate-in fade-in duration-300" id="modal-book">
+<div class="bg-surface-container-lowest border border-outline-variant w-full max-w-xl shadow-xxl overflow-hidden flex flex-col max-h-[921px]">
+<div class="p-lg border-b border-outline-variant flex justify-between items-center bg-surface-container">
+<h3 class="font-headline-md text-headline-md text-primary">Catalog Entry</h3>
+<button class="material-symbols-outlined hover:rotate-90 transition-transform" onclick="toggleModal(false)">close</button>
+</div>
+<div class="p-lg overflow-y-auto custom-scrollbar flex-grow">
+<form class="space-y-xl">
+<div class="space-y-sm">
+<label class="font-label-caps text-label-caps text-on-surface-variant">Volume Title</label>
+<input class="w-full bg-surface-container-low border-b-2 border-outline py-3 px-2 font-body-lg focus:border-tertiary-fixed-dim outline-none transition-colors" placeholder="e.g. Beyond Good and Evil" type="text"/>
+</div>
+<div class="space-y-sm">
+<label class="font-label-caps text-label-caps text-on-surface-variant">Author / Scribe</label>
+<input class="w-full bg-surface-container-low border-b-2 border-outline py-3 px-2 font-body-lg focus:border-tertiary-fixed-dim outline-none transition-colors" placeholder="e.g. Friedrich Nietzsche" type="text"/>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-xl">
+<div class="space-y-sm">
+<label class="font-label-caps text-label-caps text-on-surface-variant">Category Selection</label>
+<select class="w-full bg-surface-container-low border-b-2 border-outline py-3 px-2 font-body-md focus:border-tertiary-fixed-dim outline-none appearance-none">
+<option>Art History</option>
+<option>Philosophy</option>
+<option>Science</option>
+<option>Literature</option>
+</select>
+</div>
+<div class="space-y-sm">
+<label class="font-label-caps text-label-caps text-on-surface-variant">Access Availability</label>
+<div class="flex items-center gap-4 py-2">
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+<span class="ms-3 font-body-md text-on-surface">Digital Access Enabled</span>
+</label>
+</div>
+</div>
+</div>
+<div class="p-md bg-tertiary-container/5 border border-tertiary-container/20 flex gap-md items-start">
+<span class="material-symbols-outlined text-tertiary-container">info</span>
+<p class="font-body-md text-body-md text-on-tertiary-fixed-variant leading-relaxed">Ensure all bibliographic metadata matches the physical archive label to maintain historical accuracy across the library's decentralized indices.</p>
+</div>
+</form>
+</div>
+<div class="p-lg border-t border-outline-variant flex justify-end gap-md bg-surface-container-low">
+<button class="px-xl py-sm font-label-caps text-label-caps text-primary border border-primary hover:bg-surface-container transition-colors" onclick="toggleModal(false)">Cancel</button>
+<button class="px-xl py-sm font-label-caps text-label-caps bg-primary text-on-primary hover:opacity-90 transition-opacity" onclick="toggleModal(false)">Commit to Catalog</button>
+</div>
+</div>
+</div>
+<!-- Mobile Navigation Shell -->
+<nav class="md:hidden fixed bottom-md left-md right-md z-50 flex justify-around items-center h-16 px-4 bg-primary rounded-t-full shadow-xxl">
+<a class="flex flex-row items-center gap-2 bg-secondary-fixed-dim/20 text-on-primary rounded-full px-4 py-2 active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined">book_2</span>
+<span class="font-label-caps text-label-caps">Library</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-primary-fixed-variant opacity-70 p-2 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">settings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-primary-fixed-variant opacity-70 p-2 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">key</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-primary-fixed-variant opacity-70 p-2 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">person</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-primary-fixed-variant opacity-70 p-2 hover:opacity-100 transition-opacity" href="#">
+<span class="material-symbols-outlined">forum</span>
+</a>
+</nav>
+<script>
+        function switchTab(view) {
+            const catView = document.getElementById('view-categories');
+            const bookView = document.getElementById('view-books');
+            const catBtn = document.getElementById('tab-btn-categories');
+            const bookBtn = document.getElementById('tab-btn-books');
+
+            if (view === 'categories') {
+                catView.classList.remove('hidden');
+                bookView.classList.add('hidden');
+                catBtn.classList.add('border-primary', 'text-primary');
+                catBtn.classList.remove('border-transparent', 'text-on-surface-variant');
+                bookBtn.classList.remove('border-primary', 'text-primary');
+                bookBtn.classList.add('border-transparent', 'text-on-surface-variant');
+            } else {
+                catView.classList.add('hidden');
+                bookView.classList.remove('hidden');
+                bookBtn.classList.add('border-primary', 'text-primary');
+                bookBtn.classList.remove('border-transparent', 'text-on-surface-variant');
+                catBtn.classList.remove('border-primary', 'text-primary');
+                catBtn.classList.add('border-transparent', 'text-on-surface-variant');
+            }
+        }
+
+        function toggleModal(show) {
+            const modal = document.getElementById('modal-book');
+            if (show) {
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            } else {
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Close modal on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') toggleModal(false);
+        });
+    </script>
+</body></html>

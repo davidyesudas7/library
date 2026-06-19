@@ -1,0 +1,38 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "library_flutter",
+            "cwd": "${workspaceFolder}/library_flutter",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart"
+        },
+        {
+            "name": "library_server",
+            "cwd": "${workspaceFolder}/library_server",
+            "request": "launch",
+            "type": "dart",
+            "preLaunchTask": "docker_compose_up",
+            "program": "bin/main.dart",
+            "env": {
+                "SERVERPOD_PASSWORD_database": "CH3Z-nPO3bkxWwdXrYvQ_-_dw54Gk_cy"
+            },
+            "args": [
+                "--apply-migrations"
+            ]
+        }
+    ],
+    "compounds": [
+        {
+            "name": "library (full stack)",
+            "configurations": [
+                "library_server",
+                "library_flutter"
+            ],
+            "presentation": {
+                "order": 1
+            }
+        }
+    ]
+}

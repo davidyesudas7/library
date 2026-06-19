@@ -1,0 +1,34 @@
+import 'package:library_client/library_client.dart';
+import 'package:library_flutter/core/network/api_client.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final bookRemoteDataSourceProvider = Provider<BookRemoteDataSource>((ref) {
+  final client = ref.watch(apiClientProvider);
+  return BookRemoteDataSource(client);
+});
+
+class BookRemoteDataSource {
+  final Client _client;
+
+  BookRemoteDataSource(this._client);
+
+  Future<List<Book>> getAllBooks() async {
+    return await _client.book.getAll();
+  }
+
+  Future<List<Book>> getBooksByCategory(int categoryId) async {
+    return await _client.book.getByCategory(categoryId);
+  }
+
+  Future<Book> createBook(Book book) async {
+    return await _client.book.create(book);
+  }
+
+  Future<Book> updateBook(Book book) async {
+    return await _client.book.update(book);
+  }
+
+  Future<Book> deleteBook(Book book) async {
+    return await _client.book.delete(book);
+  }
+}

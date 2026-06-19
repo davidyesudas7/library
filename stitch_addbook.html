@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Add New Book | Academia Library</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&amp;family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed-variant": "#5c4301",
+                    "surface-container-lowest": "#ffffff",
+                    "outline": "#767872",
+                    "primary-fixed": "#e3e3dd",
+                    "on-tertiary-fixed": "#261900",
+                    "on-primary-fixed-variant": "#454743",
+                    "primary-container": "#2c2e2a",
+                    "on-tertiary-container": "#b1904a",
+                    "on-secondary-fixed": "#151e08",
+                    "on-secondary-container": "#5b674a",
+                    "error": "#ba1a1a",
+                    "primary": "#171916",
+                    "on-surface-variant": "#454842",
+                    "surface-container-highest": "#e4e2de",
+                    "on-secondary": "#ffffff",
+                    "outline-variant": "#c6c7c0",
+                    "inverse-surface": "#30312e",
+                    "tertiary-fixed": "#ffdea1",
+                    "tertiary": "#221700",
+                    "tertiary-container": "#3c2a00",
+                    "primary-fixed-dim": "#c6c7c1",
+                    "surface-tint": "#5d5f5a",
+                    "on-surface": "#1b1c1a",
+                    "surface-variant": "#e4e2de",
+                    "secondary-container": "#d7e5c1",
+                    "on-primary": "#ffffff",
+                    "secondary-fixed-dim": "#becba9",
+                    "on-error-container": "#93000a",
+                    "surface-container": "#efeeea",
+                    "surface-container-low": "#f5f3ef",
+                    "secondary": "#576246",
+                    "surface-bright": "#fbf9f5",
+                    "on-error": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "background": "#fbf9f5",
+                    "on-secondary-fixed-variant": "#3f4a30",
+                    "secondary-fixed": "#dae7c3",
+                    "surface-container-high": "#eae8e4",
+                    "on-tertiary": "#ffffff",
+                    "on-background": "#1b1c1a",
+                    "on-primary-fixed": "#1a1c19",
+                    "surface": "#fbf9f5",
+                    "inverse-primary": "#c6c7c1",
+                    "surface-dim": "#dbdad6",
+                    "tertiary-fixed-dim": "#e7c177",
+                    "on-primary-container": "#949590",
+                    "inverse-on-surface": "#f2f0ed"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "xl": "40px",
+                    "margin-mobile": "16px",
+                    "lg": "24px",
+                    "unit": "4px",
+                    "gutter": "20px",
+                    "xxl": "64px",
+                    "xs": "4px",
+                    "margin-desktop": "48px",
+                    "sm": "8px",
+                    "md": "16px"
+            },
+            "fontFamily": {
+                    "title-lg": ["Hanken Grotesk"],
+                    "headline-lg": ["EB Garamond"],
+                    "display-lg": ["EB Garamond"],
+                    "body-lg": ["Hanken Grotesk"],
+                    "headline-md": ["EB Garamond"],
+                    "label-caps": ["Hanken Grotesk"],
+                    "headline-lg-mobile": ["EB Garamond"],
+                    "body-md": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "title-lg": ["18px", {"lineHeight": "24px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+                    "body-lg": ["16px", {"lineHeight": "26px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "34px", "fontWeight": "500"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .parchment-bg {
+            background-color: #FDFBF7;
+        }
+        .diamond-separator::after {
+            content: '◆';
+            font-size: 8px;
+            color: #B89650;
+            margin: 0 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #FDFBF7;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #767872;
+            border-radius: 2px;
+        }
+        .input-underline {
+            border-bottom: 1px solid #767872;
+            transition: border-color 0.3s ease;
+        }
+        .input-underline:focus {
+            border-bottom: 2px solid #B89650;
+            outline: none;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface overflow-hidden h-screen flex">
+<!-- SideNavBar Shell -->
+<aside class="fixed left-0 top-0 h-full w-[280px] bg-surface-container-low flex flex-col py-xl px-lg border-r border-outline-variant z-50">
+<div class="mb-xxl">
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight">Academia Library</h1>
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase mt-1">Librarian Suite</p>
+</div>
+<nav class="flex-1 space-y-4 overflow-y-auto custom-scrollbar">
+<div class="space-y-1">
+<a class="group flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<a class="group flex items-center gap-md px-md py-sm text-primary font-bold border-r-4 border-tertiary bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-body-md">Manage Catalog</span>
+</a>
+<a class="group flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">palette</span>
+<span class="font-body-md">Art History</span>
+</a>
+<a class="group flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">history_edu</span>
+<span class="font-body-md">Philosophy</span>
+</a>
+<a class="group flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">science</span>
+<span class="font-body-md">Science</span>
+</a>
+<a class="group flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-body-md">Collections</span>
+</a>
+</div>
+</nav>
+<div class="mt-auto border-t border-outline-variant pt-lg space-y-2">
+<a class="group flex items-center gap-md px-md py-sm text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md">System Settings</span>
+</a>
+<a class="group flex items-center gap-md px-md py-sm text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-md">Librarian Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 ml-[280px] h-full overflow-y-auto custom-scrollbar bg-[#FDFBF7]">
+<!-- TopNavBar Shell -->
+<header class="sticky top-0 w-full px-margin-desktop py-md bg-surface/80 backdrop-blur-md flex justify-between items-center border-b border-outline-variant z-40">
+<div class="flex items-center gap-sm">
+<span class="font-label-caps text-label-caps text-on-surface-variant">CATALOG</span>
+<span class="text-on-surface-variant">/</span>
+<span class="font-label-caps text-label-caps text-primary font-bold">ADD NEW ACQUISITION</span>
+</div>
+<div class="flex items-center gap-lg">
+<div class="relative group">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">notifications</span>
+<div class="absolute -top-1 -right-1 w-2 h-2 bg-error rounded-full"></div>
+</div>
+<div class="flex items-center gap-sm cursor-pointer hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">account_circle</span>
+<span class="font-title-lg text-title-lg text-primary">Dr. Julian Vance</span>
+</div>
+</div>
+</header>
+<!-- Form Section -->
+<section class="max-w-5xl mx-auto px-margin-desktop py-xxl animate-in fade-in duration-700">
+<header class="mb-xl">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-sm italic">New Accession Entry</h2>
+<div class="w-24 h-px bg-outline-variant relative">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-on-tertiary-container w-1 h-1 rotate-45"></div>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-md max-w-2xl leading-relaxed">
+                    Please ensure all metadata follows the Library of Congress Classification standards. Detailed synopses enhance searchability within the digital archives.
+                </p>
+</header>
+<form class="grid grid-cols-12 gap-xl">
+<!-- Cover Upload & Availability (Column 1) -->
+<div class="col-span-12 lg:col-span-4 space-y-lg">
+<!-- Cover Image Upload -->
+<div class="bg-surface-container p-lg border border-outline-variant flex flex-col items-center justify-center min-h-[400px] text-center gap-md group cursor-pointer hover:border-tertiary transition-all">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-display-lg">cloud_upload</span>
+</div>
+<div>
+<p class="font-title-lg text-title-lg text-primary">Upload Cover Art</p>
+<p class="font-body-md text-body-md text-on-surface-variant mt-sm">Hi-res TIFF or JPEG only.<br/>Recommended 2:3 ratio.</p>
+</div>
+</div>
+<!-- Availability Toggle Section -->
+<div class="space-y-md">
+<label class="font-label-caps text-label-caps text-on-surface-variant">RESOURCE FORMAT</label>
+<div class="grid grid-cols-1 gap-sm">
+<label class="flex items-center justify-between p-md bg-white border border-outline-variant cursor-pointer hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-secondary">computer</span>
+<span class="font-body-md text-primary">Digital (ePub/PDF)</span>
+</div>
+<input class="w-4 h-4 rounded border-outline text-primary focus:ring-0" type="checkbox"/>
+</label>
+<label class="flex items-center justify-between p-md bg-white border border-outline-variant cursor-pointer hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-secondary">shelves</span>
+<span class="font-body-md text-primary">Physical Archive</span>
+</div>
+<input checked="" class="w-4 h-4 rounded border-outline text-primary focus:ring-0" type="checkbox"/>
+</label>
+</div>
+<div class="p-md bg-surface-container-low border border-dashed border-outline-variant">
+<label class="font-label-caps text-[10px] text-on-surface-variant block mb-sm">SHELF LOCATION</label>
+<input class="w-full bg-transparent border-none p-0 font-body-md text-primary focus:ring-0 placeholder:text-outline-variant" placeholder="e.g. SEC-A / FLOOR-2 / ROW-14" type="text"/>
+</div>
+</div>
+</div>
+<!-- Main Metadata (Column 2) -->
+<div class="col-span-12 lg:col-span-8 space-y-xl">
+<!-- Basic Info -->
+<div class="grid grid-cols-1 gap-lg">
+<div class="space-y-sm">
+<label class="font-label-caps text-label-caps text-on-surface-variant">TITLE OF WORK</label>
+<input class="w-full font-headline-md text-headline-md bg-transparent input-underline py-sm placeholder:opacity-30" placeholder="The Metaphysics of Form" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-lg">
+<div class="space-y-sm">
+<label class="font-label-caps text-label-caps text-on-surface-variant">PRIMARY AUTHOR</label>
+<input class="w-full font-body-lg text-body-lg bg-transparent input-underline py-sm placeholder:opacity-40" placeholder="Prof. Elias Thorne" type="text"/>
+</div>
+<div class="space-y-sm">
+<label class="font-label-caps text-label-caps text-on-surface-variant">DISCIPLINE / CATEGORY</label>
+<select class="w-full font-body-lg text-body-lg bg-transparent input-underline py-sm appearance-none cursor-pointer">
+<option value="art">Art History</option>
+<option selected="" value="philosophy">Philosophy</option>
+<option value="science">Science &amp; Botany</option>
+<option value="archives">Archives</option>
+</select>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-lg">
+<div class="space-y-sm">
+<label class="font-label-caps text-label-caps text-on-surface-variant">ISBN</label>
+<input class="w-full font-body-md text-body-md bg-transparent input-underline py-sm" placeholder="978-3-16-148410-0" type="text"/>
+</div>
+<div class="space-y-sm">
+<label class="font-label-caps text-label-caps text-on-surface-variant">PUB YEAR</label>
+<input class="w-full font-body-md text-body-md bg-transparent input-underline py-sm" placeholder="1924" type="text"/>
+</div>
+<div class="space-y-sm">
+<label class="font-label-caps text-label-caps text-on-surface-variant">PUBLISHER</label>
+<input class="w-full font-body-md text-body-md bg-transparent input-underline py-sm" placeholder="Blackwood Press" type="text"/>
+</div>
+</div>
+</div>
+<!-- Rich Text Description -->
+<div class="space-y-sm">
+<label class="font-label-caps text-label-caps text-on-surface-variant flex justify-between">
+                            ARCHIVAL NOTES &amp; SYNOPSIS
+                            <span class="text-[10px] font-normal italic">Markdown supported</span>
+</label>
+<div class="border border-outline-variant bg-white min-h-[280px] p-md flex flex-col">
+<div class="flex gap-md border-b border-outline-variant pb-sm mb-md text-on-surface-variant">
+<button class="material-symbols-outlined hover:text-primary transition-colors text-lg" type="button">format_bold</button>
+<button class="material-symbols-outlined hover:text-primary transition-colors text-lg" type="button">format_italic</button>
+<button class="material-symbols-outlined hover:text-primary transition-colors text-lg" type="button">format_list_bulleted</button>
+<button class="material-symbols-outlined hover:text-primary transition-colors text-lg" type="button">link</button>
+</div>
+<textarea class="flex-1 w-full border-none p-0 font-body-lg text-body-lg text-primary focus:ring-0 placeholder:opacity-30 resize-none leading-relaxed" placeholder="Enter scholarly summary and preservation notes here..."></textarea>
+</div>
+</div>
+<!-- Action Footer -->
+<div class="pt-xl flex items-center justify-between border-t border-outline-variant">
+<button class="flex items-center gap-sm px-lg py-md text-on-surface-variant font-label-caps text-label-caps hover:text-error transition-colors uppercase" type="button">
+<span class="material-symbols-outlined">delete</span>
+                            Discard Entry
+                        </button>
+<div class="flex items-center gap-lg">
+<button class="px-xl py-md font-label-caps text-label-caps text-primary border border-primary hover:bg-surface-container transition-all" type="button">
+                                SAVE AS DRAFT
+                            </button>
+<button class="px-xxl py-md bg-primary text-white font-label-caps text-label-caps hover:bg-primary/90 transition-all shadow-lg active:scale-95" type="submit">
+                                ADD TO CATALOG
+                            </button>
+</div>
+</div>
+</div>
+</form>
+</section>
+<!-- Footer Shell -->
+<footer class="mt-xxl bg-surface-container-highest flex flex-col md:flex-row justify-between items-center px-margin-desktop py-lg w-full border-t border-outline-variant gap-lg">
+<div class="flex flex-col md:flex-row items-center gap-lg">
+<span class="font-headline-md text-headline-md text-primary">Academia Library</span>
+<span class="hidden md:block w-px h-6 bg-outline-variant"></span>
+<p class="font-body-md text-body-md text-on-surface-variant">© 2024 Academia Library. All Rights Reserved.</p>
+</div>
+<div class="flex items-center gap-xl">
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary underline" href="#">Privacy Policy</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary underline" href="#">Terms of Service</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary underline" href="#">Contact Librarian</a>
+</div>
+</footer>
+</main>
+<script>
+        // Micro-interactions for form focus states
+        document.querySelectorAll('input, select, textarea').forEach(element => {
+            element.addEventListener('focus', () => {
+                element.parentElement.querySelector('label')?.classList.add('text-primary');
+            });
+            element.addEventListener('blur', () => {
+                element.parentElement.querySelector('label')?.classList.remove('text-primary');
+            });
+        });
+
+        // Toggle handling for the custom checkbox styling logic if needed
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', (e) => {
+                const parent = e.target.closest('label');
+                if(e.target.checked) {
+                    parent.classList.add('bg-secondary-container/20');
+                } else {
+                    parent.classList.remove('bg-secondary-container/20');
+                }
+            });
+        });
+    </script>
+</body></html>
