@@ -1,19 +1,21 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:library_client/library_client.dart';
 import '../../data/repositories/category_repository_impl.dart';
 
-final categoriesProvider = FutureProvider<List<Category>>((ref) async {
+part 'category_providers.g.dart';
+
+@riverpod
+Future<List<Category>> categories(Ref ref) async {
   final repository = ref.watch(categoryRepositoryProvider);
   final result = await repository.getAllCategories();
   return result.fold(
     (failure) => throw Exception(failure),
     (categories) => categories,
   );
-});
+}
 
-final categoryNotifierProvider = AsyncNotifierProvider<CategoryNotifier, void>(CategoryNotifier.new);
-
-class CategoryNotifier extends AsyncNotifier<void> {
+@riverpod
+class CategoryNotifier extends _$CategoryNotifier {
   @override
   Future<void> build() async {}
 

@@ -1,11 +1,14 @@
 import 'package:library_client/library_client.dart';
 import 'package:library_flutter/core/network/api_client.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final bookRemoteDataSourceProvider = Provider<BookRemoteDataSource>((ref) {
+part 'book_remote_datasource.g.dart';
+
+@riverpod
+BookRemoteDataSource bookRemoteDataSource(Ref ref) {
   final client = ref.watch(apiClientProvider);
   return BookRemoteDataSource(client);
-});
+}
 
 class BookRemoteDataSource {
   final Client _client;

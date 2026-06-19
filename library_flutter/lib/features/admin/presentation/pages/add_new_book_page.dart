@@ -74,9 +74,9 @@ class _AddNewBookPageState extends ConsumerState<AddNewBookPage> {
       );
 
       if (widget.existingBook != null) {
-        await ref.read(bookNotifierProvider.notifier).updateBook(book);
+        await ref.read(bookProvider.notifier).updateBook(book);
       } else {
-        await ref.read(bookNotifierProvider.notifier).createBook(book);
+        await ref.read(bookProvider.notifier).createBook(book);
       }
 
       if (mounted) {

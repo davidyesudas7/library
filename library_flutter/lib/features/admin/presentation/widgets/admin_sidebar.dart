@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:library_flutter/core/network/serverpod_client.dart';
 import 'package:library_flutter/core/theme/app_colors.dart';
 import 'package:library_flutter/features/library/presentation/providers/category_providers.dart';
+import 'package:library_flutter/features/auth/presentation/providers/auth_provider.dart';
 
 class AdminSidebar extends ConsumerWidget {
   const AdminSidebar({super.key});
@@ -59,25 +61,37 @@ class AdminSidebar extends ConsumerWidget {
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                  child: Text('CATEGORIES', style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.2,
-                    color: AppColors.onSurfaceVariant,
-                  )),
+                  child: Text(
+                    'CATEGORIES',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.2,
+                      color: AppColors.onSurfaceVariant,
+                    ),
+                  ),
                 ),
                 categoriesAsync.when(
                   data: (categories) => Column(
-                    children: categories.map((cat) => _SidebarItem(
-                      icon: Icons.bookmark_border,
-                      title: cat.name,
-                      onTap: () => context.go('/admin/category/${cat.id}'),
-                    )).toList(),
+                    children: categories
+                        .map(
+                          (cat) => _SidebarItem(
+                            icon: Icons.bookmark_border,
+                            title: cat.name,
+                            onTap: () =>
+                                context.go('/admin/category/${cat.id}'),
+                          ),
+                        )
+                        .toList(),
                   ),
-                  loading: () => const Center(child: CircularProgressIndicator()),
+                  loading: () =>
+                      const Center(child: CircularProgressIndicator()),
                   error: (_, __) => const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 24),
-                    child: Text('Failed to load categories', style: TextStyle(color: AppColors.error)),
+                    child: Text(
+                      'Failed to load categories',
+                      style: TextStyle(color: AppColors.error),
+                    ),
                   ),
                 ),
               ],
@@ -96,7 +110,10 @@ class AdminSidebar extends ConsumerWidget {
                 _SidebarItem(
                   icon: Icons.logout,
                   title: 'Sign Out',
-                  onTap: () => context.go('/login'),
+                  onTap: () async {
+                    await ref.read(authProvider.notifier).logout();
+                    if (context.mounted) context.go('/');
+                  },
                 ),
               ],
             ),
@@ -122,10 +139,13 @@ class _SidebarItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: Icon(icon, color: AppColors.onSurfaceVariant),
-      title: Text(title, style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-        fontWeight: FontWeight.w600,
-        color: AppColors.onSurfaceVariant,
-      )),
+      title: Text(
+        title,
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          fontWeight: FontWeight.w600,
+          color: AppColors.onSurfaceVariant,
+        ),
+      ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 24),
       onTap: onTap,
       hoverColor: AppColors.surfaceContainerHigh,

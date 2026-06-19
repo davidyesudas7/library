@@ -9,6 +9,7 @@ late Client client;
 Future<void> initializeServerpodClient() async {
   client = Client(
     'http://localhost:8080/',
+    // ignore: deprecated_member_use
     authenticationKeyManager: FlutterAuthenticationKeyManager(),
   )..connectivityMonitor = FlutterConnectivityMonitor();
 

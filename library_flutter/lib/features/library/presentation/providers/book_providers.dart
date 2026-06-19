@@ -1,28 +1,31 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:library_client/library_client.dart';
 import '../../data/repositories/book_repository_impl.dart';
 
-final booksProvider = FutureProvider<List<Book>>((ref) async {
+part 'book_providers.g.dart';
+
+@riverpod
+Future<List<Book>> books(Ref ref) async {
   final repository = ref.watch(bookRepositoryProvider);
   final result = await repository.getAllBooks();
   return result.fold(
     (failure) => throw Exception(failure),
     (books) => books,
   );
-});
+}
 
-final booksByCategoryProvider = FutureProvider.family<List<Book>, int>((ref, categoryId) async {
+@riverpod
+Future<List<Book>> booksByCategory(Ref ref, int categoryId) async {
   final repository = ref.watch(bookRepositoryProvider);
   final result = await repository.getBooksByCategory(categoryId);
   return result.fold(
     (failure) => throw Exception(failure),
     (books) => books,
   );
-});
+}
 
-final bookNotifierProvider = AsyncNotifierProvider<BookNotifier, void>(BookNotifier.new);
-
-class BookNotifier extends AsyncNotifier<void> {
+@riverpod
+class BookNotifier extends _$BookNotifier {
   @override
   Future<void> build() async {}
 

@@ -1,6 +1,7 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:library_client/library_client.dart';
+import '../../features/auth/presentation/providers/auth_provider.dart';
 import '../../features/auth/presentation/pages/user_login_page.dart';
 import '../../features/library/presentation/pages/home_page.dart';
 import '../../features/auth/presentation/pages/admin_login_page.dart';
@@ -11,13 +12,18 @@ import '../../features/admin/presentation/pages/add_new_book_page.dart';
 import '../../features/library/presentation/pages/book_detail_page.dart';
 import '../network/serverpod_client.dart';
 
-final appRouterProvider = Provider<GoRouter>((ref) {
+part 'app_router.g.dart';
+
+@riverpod
+GoRouter appRouter(Ref ref) {
+  final user = ref.watch(authProvider);
+  final isLoggedIn = user != null;
+  final isAdmin = isLoggedIn && user.email == 'admin@library.com';
+
   return GoRouter(
     initialLocation: '/',
     redirect: (context, state) {
       final isGoingToAdmin = state.matchedLocation.startsWith('/admin');
-      final isLoggedIn = sessionManager.isSignedIn;
-      final isAdmin = isLoggedIn && sessionManager.signedInUser?.email == 'admin@library.com';
       
       if (isGoingToAdmin && state.matchedLocation != '/admin/login') {
         if (!isAdmin) {
@@ -84,4 +90,4 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
     ],
   );
-});
+}

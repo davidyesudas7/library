@@ -1,13 +1,16 @@
 import 'package:dartz/dartz.dart';
 import 'package:library_client/library_client.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../domain/repositories/book_repository.dart';
 import '../datasources/book_remote_datasource.dart';
 
-final bookRepositoryProvider = Provider<BookRepository>((ref) {
+part 'book_repository_impl.g.dart';
+
+@riverpod
+BookRepository bookRepository(Ref ref) {
   final remoteDataSource = ref.watch(bookRemoteDataSourceProvider);
   return BookRepositoryImpl(remoteDataSource);
-});
+}
 
 class BookRepositoryImpl implements BookRepository {
   final BookRemoteDataSource _remoteDataSource;

@@ -5,6 +5,7 @@ import 'package:library_flutter/core/theme/app_colors.dart';
 import 'package:library_flutter/features/admin/presentation/widgets/book_card.dart';
 import 'package:library_flutter/features/library/presentation/providers/book_providers.dart';
 import 'package:library_flutter/features/library/presentation/providers/category_providers.dart';
+import 'package:library_flutter/features/auth/presentation/providers/auth_provider.dart';
 import 'package:library_flutter/core/network/serverpod_client.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -22,17 +23,6 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   void initState() {
     super.initState();
-    sessionManager.addListener(_onSessionChanged);
-  }
-
-  @override
-  void dispose() {
-    sessionManager.removeListener(_onSessionChanged);
-    super.dispose();
-  }
-
-  void _onSessionChanged() {
-    if (mounted) setState(() {});
   }
 
   @override
@@ -41,8 +31,8 @@ class _HomePageState extends ConsumerState<HomePage> {
     final categoriesAsync = ref.watch(categoriesProvider);
     final isDesktop = MediaQuery.of(context).size.width >= 800;
 
-    final isLoggedIn = sessionManager.isSignedIn;
-    final user = sessionManager.signedInUser;
+    final user = ref.watch(authProvider);
+    final isLoggedIn = user != null;
 
     return Scaffold(
       appBar: AppBar(
@@ -51,24 +41,24 @@ class _HomePageState extends ConsumerState<HomePage> {
           style: TextStyle(fontFamily: 'EB Garamond'),
         ),
         actions: [
-          if (!isLoggedIn) ...[
-            TextButton(
-              onPressed: () => context.go('/login'),
-              child: const Text('Login / Register'),
-            ),
-            const SizedBox(width: 8),
-          ],
+          // if (!isLoggedIn) ...[
+          //   TextButton(
+          //     onPressed: () => context.go('/login'),
+          //     child: const Text('Login / Register'),
+          //   ),
+          //   const SizedBox(width: 8),
+          // ],
           if (isLoggedIn) ...[
             Center(
               child: Text(
-                "Hi, \${user?.userName ?? 'User'}",
+                "Hi, ${user?.userName ?? 'User'}",
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
             const SizedBox(width: 16),
             TextButton(
               onPressed: () async {
-                await sessionManager.signOutDevice();
+                await ref.read(authProvider.notifier).logout();
                 if (mounted) context.go('/');
               },
               child: const Text('Logout'),

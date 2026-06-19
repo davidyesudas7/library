@@ -176,7 +176,7 @@ class _ManageCategoryPageState extends ConsumerState<ManageCategoryPage> {
                     IconButton(
                       icon: const Icon(Icons.delete_outline, size: 20),
                       onPressed: () async {
-                        await ref.read(bookNotifierProvider.notifier).deleteBook(book);
+                        await ref.read(bookProvider.notifier).deleteBook(book);
                         ref.invalidate(booksByCategoryProvider(widget.categoryId));
                       },
                       color: AppColors.error,

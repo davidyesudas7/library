@@ -1,13 +1,16 @@
 import 'package:dartz/dartz.dart';
 import 'package:library_client/library_client.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../domain/repositories/category_repository.dart';
 import '../datasources/category_remote_datasource.dart';
 
-final categoryRepositoryProvider = Provider<CategoryRepository>((ref) {
+part 'category_repository_impl.g.dart';
+
+@riverpod
+CategoryRepository categoryRepository(Ref ref) {
   final remoteDataSource = ref.watch(categoryRemoteDataSourceProvider);
   return CategoryRepositoryImpl(remoteDataSource);
-});
+}
 
 class CategoryRepositoryImpl implements CategoryRepository {
   final CategoryRemoteDataSource _remoteDataSource;

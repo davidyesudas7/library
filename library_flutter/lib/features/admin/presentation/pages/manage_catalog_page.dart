@@ -221,10 +221,10 @@ class _ManageCatalogPageState extends ConsumerState<ManageCatalogPage> with Sing
                 if (name.isNotEmpty) {
                   if (isEditing) {
                     final updated = existingCategory.copyWith(name: name);
-                    ref.read(categoryNotifierProvider.notifier).updateCategory(updated);
+                    ref.read(categoryProvider.notifier).updateCategory(updated);
                   } else {
                     final newCategory = Category(name: name);
-                    ref.read(categoryNotifierProvider.notifier).createCategory(newCategory);
+                    ref.read(categoryProvider.notifier).createCategory(newCategory);
                   }
                   Navigator.pop(context);
                 }
@@ -252,7 +252,7 @@ class _ManageCatalogPageState extends ConsumerState<ManageCatalogPage> with Sing
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: AppColors.error, foregroundColor: Colors.white),
               onPressed: () {
-                ref.read(categoryNotifierProvider.notifier).deleteCategory(category);
+                ref.read(categoryProvider.notifier).deleteCategory(category);
                 Navigator.pop(context);
               },
               child: const Text('DELETE'),
@@ -310,7 +310,7 @@ class _ManageCatalogPageState extends ConsumerState<ManageCatalogPage> with Sing
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: AppColors.error, foregroundColor: Colors.white),
               onPressed: () {
-                ref.read(bookNotifierProvider.notifier).deleteBook(book);
+                ref.read(bookProvider.notifier).deleteBook(book);
                 Navigator.pop(context);
               },
               child: const Text('DELETE'),
