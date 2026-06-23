@@ -9,5 +9,20 @@ category:
   - create:
   - update:
   - delete:
+downloadData:
+  - saveDownloadRequest:
+  - getTotalDownloadCount:
+  - getBookDownloadCount:
+emailIdp:
+  - login:
+  - startRegistration:
+  - verifyRegistrationCode:
+  - finishRegistration:
+  - startPasswordReset:
+  - verifyPasswordResetCode:
+  - finishPasswordReset:
+  - hasAccount:
+jwtRefresh:
+  - refreshAccessToken:
 seed:
   - seedDatabase:

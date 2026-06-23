@@ -13,11 +13,16 @@
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'book.dart' as _i2;
 import 'category.dart' as _i3;
-import 'package:library_client/src/protocol/book.dart' as _i4;
-import 'package:library_client/src/protocol/category.dart' as _i5;
-import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i6;
+import 'download_data.dart' as _i4;
+import 'package:library_client/src/protocol/book.dart' as _i5;
+import 'package:library_client/src/protocol/category.dart' as _i6;
+import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
+    as _i7;
+import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
+    as _i8;
 export 'book.dart';
 export 'category.dart';
+export 'download_data.dart';
 export 'client.dart';
 
 class Protocol extends _i1.SerializationManager {
@@ -60,21 +65,30 @@ class Protocol extends _i1.SerializationManager {
     if (t == _i3.Category) {
       return _i3.Category.fromJson(data) as T;
     }
+    if (t == _i4.DownloadedBook) {
+      return _i4.DownloadedBook.fromJson(data) as T;
+    }
     if (t == _i1.getType<_i2.Book?>()) {
       return (data != null ? _i2.Book.fromJson(data) : null) as T;
     }
     if (t == _i1.getType<_i3.Category?>()) {
       return (data != null ? _i3.Category.fromJson(data) : null) as T;
     }
-    if (t == List<_i4.Book>) {
-      return (data as List).map((e) => deserialize<_i4.Book>(e)).toList() as T;
+    if (t == _i1.getType<_i4.DownloadedBook?>()) {
+      return (data != null ? _i4.DownloadedBook.fromJson(data) : null) as T;
     }
-    if (t == List<_i5.Category>) {
-      return (data as List).map((e) => deserialize<_i5.Category>(e)).toList()
+    if (t == List<_i5.Book>) {
+      return (data as List).map((e) => deserialize<_i5.Book>(e)).toList() as T;
+    }
+    if (t == List<_i6.Category>) {
+      return (data as List).map((e) => deserialize<_i6.Category>(e)).toList()
           as T;
     }
     try {
-      return _i6.Protocol().deserialize<T>(data, t);
+      return _i7.Protocol().deserialize<T>(data, t);
+    } on _i1.DeserializationTypeNotFoundException catch (_) {}
+    try {
+      return _i8.Protocol().deserialize<T>(data, t);
     } on _i1.DeserializationTypeNotFoundException catch (_) {}
     return super.deserialize<T>(data, t);
   }
@@ -83,6 +97,7 @@ class Protocol extends _i1.SerializationManager {
     return switch (type) {
       _i2.Book => 'Book',
       _i3.Category => 'Category',
+      _i4.DownloadedBook => 'DownloadedBook',
       _ => null,
     };
   }
@@ -101,10 +116,16 @@ class Protocol extends _i1.SerializationManager {
         return 'Book';
       case _i3.Category():
         return 'Category';
+      case _i4.DownloadedBook():
+        return 'DownloadedBook';
     }
-    className = _i6.Protocol().getClassNameForObject(data);
+    className = _i7.Protocol().getClassNameForObject(data);
     if (className != null) {
-      return 'serverpod_auth.$className';
+      return 'serverpod_auth_core.$className';
+    }
+    className = _i8.Protocol().getClassNameForObject(data);
+    if (className != null) {
+      return 'serverpod_auth_idp.$className';
     }
     return null;
   }
@@ -121,9 +142,16 @@ class Protocol extends _i1.SerializationManager {
     if (dataClassName == 'Category') {
       return deserialize<_i3.Category>(data['data']);
     }
-    if (dataClassName.startsWith('serverpod_auth.')) {
-      data['className'] = dataClassName.substring(15);
-      return _i6.Protocol().deserializeByClassName(data);
+    if (dataClassName == 'DownloadedBook') {
+      return deserialize<_i4.DownloadedBook>(data['data']);
+    }
+    if (dataClassName.startsWith('serverpod_auth_core.')) {
+      data['className'] = dataClassName.substring(20);
+      return _i7.Protocol().deserializeByClassName(data);
+    }
+    if (dataClassName.startsWith('serverpod_auth_idp.')) {
+      data['className'] = dataClassName.substring(19);
+      return _i8.Protocol().deserializeByClassName(data);
     }
     return super.deserializeByClassName(data);
   }
@@ -138,7 +166,10 @@ class Protocol extends _i1.SerializationManager {
       return null;
     }
     try {
-      return _i6.Protocol().mapRecordToJson(record);
+      return _i7.Protocol().mapRecordToJson(record);
+    } catch (_) {}
+    try {
+      return _i8.Protocol().mapRecordToJson(record);
     } catch (_) {}
     throw Exception('Unsupported record type ${record.runtimeType}');
   }

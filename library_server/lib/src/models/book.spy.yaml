@@ -9,3 +9,4 @@ fields:
   isAvailableOffline: bool
   pdfUrl: String?
   category: Category?, relation
+

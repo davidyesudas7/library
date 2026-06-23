@@ -1,0 +1,8 @@
+class: DownloadedBook
+table: downloaded_books
+fields:
+  userName: String
+  parish: String
+  email: String?
+  phone: String?
+  book: Book?, relation

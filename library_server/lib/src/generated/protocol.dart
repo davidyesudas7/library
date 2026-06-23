@@ -12,13 +12,18 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod/protocol.dart' as _i2;
-import 'package:serverpod_auth_server/serverpod_auth_server.dart' as _i3;
-import 'book.dart' as _i4;
-import 'category.dart' as _i5;
-import 'package:library_server/src/generated/book.dart' as _i6;
-import 'package:library_server/src/generated/category.dart' as _i7;
+import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
+    as _i3;
+import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
+    as _i4;
+import 'book.dart' as _i5;
+import 'category.dart' as _i6;
+import 'download_data.dart' as _i7;
+import 'package:library_server/src/generated/book.dart' as _i8;
+import 'package:library_server/src/generated/category.dart' as _i9;
 export 'book.dart';
 export 'category.dart';
+export 'download_data.dart';
 
 class Protocol extends _i1.SerializationManagerServer {
   Protocol._();
@@ -157,7 +162,81 @@ class Protocol extends _i1.SerializationManagerServer {
       ],
       managed: true,
     ),
+    _i2.TableDefinition(
+      name: 'downloaded_books',
+      dartName: 'DownloadedBook',
+      schema: 'public',
+      module: 'library',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'downloaded_books_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'userName',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'parish',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'email',
+          columnType: _i2.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'phone',
+          columnType: _i2.ColumnType.text,
+          isNullable: true,
+          dartType: 'String?',
+        ),
+        _i2.ColumnDefinition(
+          name: 'bookId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+      ],
+      foreignKeys: [
+        _i2.ForeignKeyDefinition(
+          constraintName: 'downloaded_books_fk_0',
+          columns: ['bookId'],
+          referenceTable: 'book',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'downloaded_books_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            ),
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        ),
+      ],
+      managed: true,
+    ),
     ..._i3.Protocol.targetTableDefinitions,
+    ..._i4.Protocol.targetTableDefinitions,
     ..._i2.Protocol.targetTableDefinitions,
   ];
 
@@ -188,27 +267,36 @@ class Protocol extends _i1.SerializationManagerServer {
       }
     }
 
-    if (t == _i4.Book) {
-      return _i4.Book.fromJson(data) as T;
+    if (t == _i5.Book) {
+      return _i5.Book.fromJson(data) as T;
     }
-    if (t == _i5.Category) {
-      return _i5.Category.fromJson(data) as T;
+    if (t == _i6.Category) {
+      return _i6.Category.fromJson(data) as T;
     }
-    if (t == _i1.getType<_i4.Book?>()) {
-      return (data != null ? _i4.Book.fromJson(data) : null) as T;
+    if (t == _i7.DownloadedBook) {
+      return _i7.DownloadedBook.fromJson(data) as T;
     }
-    if (t == _i1.getType<_i5.Category?>()) {
-      return (data != null ? _i5.Category.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i5.Book?>()) {
+      return (data != null ? _i5.Book.fromJson(data) : null) as T;
     }
-    if (t == List<_i6.Book>) {
-      return (data as List).map((e) => deserialize<_i6.Book>(e)).toList() as T;
+    if (t == _i1.getType<_i6.Category?>()) {
+      return (data != null ? _i6.Category.fromJson(data) : null) as T;
     }
-    if (t == List<_i7.Category>) {
-      return (data as List).map((e) => deserialize<_i7.Category>(e)).toList()
+    if (t == _i1.getType<_i7.DownloadedBook?>()) {
+      return (data != null ? _i7.DownloadedBook.fromJson(data) : null) as T;
+    }
+    if (t == List<_i8.Book>) {
+      return (data as List).map((e) => deserialize<_i8.Book>(e)).toList() as T;
+    }
+    if (t == List<_i9.Category>) {
+      return (data as List).map((e) => deserialize<_i9.Category>(e)).toList()
           as T;
     }
     try {
       return _i3.Protocol().deserialize<T>(data, t);
+    } on _i1.DeserializationTypeNotFoundException catch (_) {}
+    try {
+      return _i4.Protocol().deserialize<T>(data, t);
     } on _i1.DeserializationTypeNotFoundException catch (_) {}
     try {
       return _i2.Protocol().deserialize<T>(data, t);
@@ -218,8 +306,9 @@ class Protocol extends _i1.SerializationManagerServer {
 
   static String? getClassNameForType(Type type) {
     return switch (type) {
-      _i4.Book => 'Book',
-      _i5.Category => 'Category',
+      _i5.Book => 'Book',
+      _i6.Category => 'Category',
+      _i7.DownloadedBook => 'DownloadedBook',
       _ => null,
     };
   }
@@ -234,10 +323,12 @@ class Protocol extends _i1.SerializationManagerServer {
     }
 
     switch (data) {
-      case _i4.Book():
+      case _i5.Book():
         return 'Book';
-      case _i5.Category():
+      case _i6.Category():
         return 'Category';
+      case _i7.DownloadedBook():
+        return 'DownloadedBook';
     }
     className = _i2.Protocol().getClassNameForObject(data);
     if (className != null) {
@@ -245,7 +336,11 @@ class Protocol extends _i1.SerializationManagerServer {
     }
     className = _i3.Protocol().getClassNameForObject(data);
     if (className != null) {
-      return 'serverpod_auth.$className';
+      return 'serverpod_auth_core.$className';
+    }
+    className = _i4.Protocol().getClassNameForObject(data);
+    if (className != null) {
+      return 'serverpod_auth_idp.$className';
     }
     return null;
   }
@@ -257,18 +352,25 @@ class Protocol extends _i1.SerializationManagerServer {
       return super.deserializeByClassName(data);
     }
     if (dataClassName == 'Book') {
-      return deserialize<_i4.Book>(data['data']);
+      return deserialize<_i5.Book>(data['data']);
     }
     if (dataClassName == 'Category') {
-      return deserialize<_i5.Category>(data['data']);
+      return deserialize<_i6.Category>(data['data']);
+    }
+    if (dataClassName == 'DownloadedBook') {
+      return deserialize<_i7.DownloadedBook>(data['data']);
     }
     if (dataClassName.startsWith('serverpod.')) {
       data['className'] = dataClassName.substring(10);
       return _i2.Protocol().deserializeByClassName(data);
     }
-    if (dataClassName.startsWith('serverpod_auth.')) {
-      data['className'] = dataClassName.substring(15);
+    if (dataClassName.startsWith('serverpod_auth_core.')) {
+      data['className'] = dataClassName.substring(20);
       return _i3.Protocol().deserializeByClassName(data);
+    }
+    if (dataClassName.startsWith('serverpod_auth_idp.')) {
+      data['className'] = dataClassName.substring(19);
+      return _i4.Protocol().deserializeByClassName(data);
     }
     return super.deserializeByClassName(data);
   }
@@ -282,16 +384,24 @@ class Protocol extends _i1.SerializationManagerServer {
       }
     }
     {
+      var table = _i4.Protocol().getTableForType(t);
+      if (table != null) {
+        return table;
+      }
+    }
+    {
       var table = _i2.Protocol().getTableForType(t);
       if (table != null) {
         return table;
       }
     }
     switch (t) {
-      case _i4.Book:
-        return _i4.Book.t;
-      case _i5.Category:
-        return _i5.Category.t;
+      case _i5.Book:
+        return _i5.Book.t;
+      case _i6.Category:
+        return _i6.Category.t;
+      case _i7.DownloadedBook:
+        return _i7.DownloadedBook.t;
     }
     return null;
   }
@@ -314,6 +424,9 @@ class Protocol extends _i1.SerializationManagerServer {
     }
     try {
       return _i3.Protocol().mapRecordToJson(record);
+    } catch (_) {}
+    try {
+      return _i4.Protocol().mapRecordToJson(record);
     } catch (_) {}
     throw Exception('Unsupported record type ${record.runtimeType}');
   }
