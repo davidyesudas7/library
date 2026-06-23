@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:library_flutter/core/theme/app_colors.dart';
 import 'package:go_router/go_router.dart';
-import 'package:serverpod_auth_email_flutter/serverpod_auth_email_flutter.dart';
+import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 import 'package:library_flutter/core/network/serverpod_client.dart';
 
 class UserLoginPage extends StatelessWidget {
@@ -34,11 +34,15 @@ class UserLoginPage extends StatelessWidget {
                 style: TextStyle(color: AppColors.onSurfaceVariant),
               ),
               const SizedBox(height: 32),
-              SignInWithEmailButton(
-                caller: client.modules.auth,
-                onSignedIn: () {
-                  context.go('/');
-                },
+              // Using the new IDP sign in widget. It handles the UI for enabled providers.
+              SizedBox(
+                width: double.infinity,
+                child: SignInWidget(
+                  client: client,
+                  onAuthenticated: () {
+                    context.go('/');
+                  },
+                ),
               ),
               const SizedBox(height: 16),
               TextButton(

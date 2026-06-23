@@ -24,7 +24,7 @@ Future<List<Book>> booksByCategory(Ref ref, int categoryId) async {
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 class BookNotifier extends _$BookNotifier {
   @override
   Future<void> build() async {}

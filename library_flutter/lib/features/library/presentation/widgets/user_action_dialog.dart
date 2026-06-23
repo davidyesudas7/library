@@ -4,7 +4,7 @@ import 'package:library_flutter/core/theme/app_colors.dart';
 class UserActionDialog extends StatefulWidget {
   final String title;
   final String actionLabel;
-  final VoidCallback onActionSuccess;
+  final void Function(String name, String parish, String email, String phone) onActionSuccess;
 
   const UserActionDialog({
     super.key,
@@ -21,12 +21,16 @@ class _UserActionDialogState extends State<UserActionDialog> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _parishController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
   bool _isLoading = false;
 
   @override
   void dispose() {
     _nameController.dispose();
     _parishController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 
@@ -39,7 +43,12 @@ class _UserActionDialogState extends State<UserActionDialog> {
       if (mounted) {
         setState(() => _isLoading = false);
         Navigator.of(context).pop(); // Close the dialog
-        widget.onActionSuccess(); // Trigger success callback
+        widget.onActionSuccess(
+          _nameController.text.trim(),
+          _parishController.text.trim(),
+          _emailController.text.trim(),
+          _phoneController.text.trim(),
+        ); // Trigger success callback
       }
     }
   }
@@ -78,6 +87,24 @@ class _UserActionDialogState extends State<UserActionDialog> {
                   labelText: 'Parish (Optional)',
                   border: OutlineInputBorder(),
                 ),
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _emailController,
+                decoration: const InputDecoration(
+                  labelText: 'Email (Optional)',
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.emailAddress,
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _phoneController,
+                decoration: const InputDecoration(
+                  labelText: 'Phone (Optional)',
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.phone,
               ),
             ],
           ),

@@ -8,6 +8,7 @@ import '../widgets/book_card.dart';
 import 'package:library_flutter/features/library/presentation/providers/book_providers.dart';
 import 'package:library_flutter/features/library/presentation/providers/category_providers.dart';
 import 'package:go_router/go_router.dart';
+import 'package:library_flutter/core/network/serverpod_client.dart';
 
 class LibrarianDashboardPage extends ConsumerWidget {
   const LibrarianDashboardPage({super.key});
@@ -82,6 +83,17 @@ class LibrarianDashboardPage extends ConsumerWidget {
             _buildStatCard(context, 'Total Books', totalBooks.toString()),
             const SizedBox(width: 16),
             _buildStatCard(context, 'Categories', totalCategories.toString()),
+            const SizedBox(width: 16),
+            FutureBuilder<int>(
+              future: client.downloadData.getTotalDownloadCount(),
+              builder: (context, snapshot) {
+                return _buildStatCard(
+                  context, 
+                  'Downloads', 
+                  snapshot.hasData ? snapshot.data.toString() : '...'
+                );
+              },
+            ),
           ],
         )
       ],

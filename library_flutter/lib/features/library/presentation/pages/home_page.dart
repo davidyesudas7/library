@@ -19,6 +19,14 @@ class _HomePageState extends ConsumerState<HomePage> {
   int? _selectedCategoryId;
   bool _filterOnline = true;
   bool _filterOffline = true;
+  String _searchQuery = '';
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -51,7 +59,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           if (isLoggedIn) ...[
             Center(
               child: Text(
-                "Hi, ${user?.userName ?? 'User'}",
+                "Hi, User",
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
@@ -66,7 +74,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             const SizedBox(width: 8),
           ],
           TextButton(
-            onPressed: () => context.go('/admin/login'),
+            onPressed: () => context.go('/admin'),
             child: const Text('Admin'),
           ),
           const SizedBox(width: 24),
@@ -94,7 +102,17 @@ class _HomePageState extends ConsumerState<HomePage> {
                   if (_filterOffline && book.isAvailableOffline)
                     matchesAvail = true;
 
-                  return matchesAvail;
+                  if (!matchesAvail) return false;
+
+                  if (_searchQuery.isNotEmpty) {
+                    final query = _searchQuery.toLowerCase();
+                    if (!book.title.toLowerCase().contains(query) &&
+                        !book.author.toLowerCase().contains(query)) {
+                      return false;
+                    }
+                  }
+
+                  return true;
                 }).toList();
 
                 if (filteredBooks.isEmpty) {
@@ -111,26 +129,50 @@ class _HomePageState extends ConsumerState<HomePage> {
                 else if (screenWidth < 900)
                   columns = 3;
 
-                return GridView.builder(
-                  padding: const EdgeInsets.all(24),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: columns,
-                    crossAxisSpacing: 24,
-                    mainAxisSpacing: 24,
-                    childAspectRatio: 0.65,
-                  ),
-                  itemCount: filteredBooks.length,
-                  itemBuilder: (context, index) {
-                    final book = filteredBooks[index];
-                    return BookCard(
-                      book: book,
-                      onTap: () {
-                        if (book.id != null) {
-                          context.push('/book/${book.id}', extra: book);
-                        }
-                      },
-                    );
-                  },
+                return Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+                      child: TextField(
+                        controller: _searchController,
+                        onChanged: (value) => setState(() => _searchQuery = value),
+                        decoration: InputDecoration(
+                          hintText: 'Search by title or author...',
+                          prefixIcon: const Icon(Icons.search),
+                          filled: true,
+                          fillColor: AppColors.surfaceContainerLowest,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: GridView.builder(
+                        padding: const EdgeInsets.all(24),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: columns,
+                          crossAxisSpacing: 24,
+                          mainAxisSpacing: 24,
+                          childAspectRatio: 0.65,
+                        ),
+                        itemCount: filteredBooks.length,
+                        itemBuilder: (context, index) {
+                          final book = filteredBooks[index];
+                          return BookCard(
+                            book: book,
+                            onTap: () {
+                              if (book.id != null) {
+                                context.push('/book/${book.id}', extra: book);
+                              }
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 );
               },
               loading: () => const Center(child: CircularProgressIndicator()),

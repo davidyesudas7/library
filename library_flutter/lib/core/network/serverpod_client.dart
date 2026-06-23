@@ -1,18 +1,18 @@
 import 'package:serverpod_flutter/serverpod_flutter.dart';
+import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 import 'package:library_client/library_client.dart';
-import 'package:serverpod_flutter/serverpod_flutter.dart';
-import 'package:serverpod_auth_shared_flutter/serverpod_auth_shared_flutter.dart';
 
-late SessionManager sessionManager;
 late Client client;
 
 Future<void> initializeServerpodClient() async {
-  client = Client(
-    'http://localhost:8080/',
-    // ignore: deprecated_member_use
-    authenticationKeyManager: FlutterAuthenticationKeyManager(),
-  )..connectivityMonitor = FlutterConnectivityMonitor();
+  const apiUrl = String.fromEnvironment(
+    'API_URL', 
+    defaultValue: 'http://localhost:8080/',
+  );
 
-  sessionManager = SessionManager(caller: client.modules.auth);
-  await sessionManager.initialize();
+  client = Client(apiUrl)
+    ..connectivityMonitor = FlutterConnectivityMonitor()
+    ..authSessionManager = FlutterAuthSessionManager();
+
+  client.auth.initialize();
 }

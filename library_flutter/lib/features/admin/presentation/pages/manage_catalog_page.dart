@@ -17,7 +17,8 @@ class ManageCatalogPage extends ConsumerStatefulWidget {
   ConsumerState<ManageCatalogPage> createState() => _ManageCatalogPageState();
 }
 
-class _ManageCatalogPageState extends ConsumerState<ManageCatalogPage> with SingleTickerProviderStateMixin {
+class _ManageCatalogPageState extends ConsumerState<ManageCatalogPage>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -109,11 +110,15 @@ class _ManageCatalogPageState extends ConsumerState<ManageCatalogPage> with Sing
                     fillColor: AppColors.surfaceContainerLowest,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4),
-                      borderSide: const BorderSide(color: AppColors.outlineVariant),
+                      borderSide: const BorderSide(
+                        color: AppColors.outlineVariant,
+                      ),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4),
-                      borderSide: const BorderSide(color: AppColors.outlineVariant),
+                      borderSide: const BorderSide(
+                        color: AppColors.outlineVariant,
+                      ),
                     ),
                     contentPadding: const EdgeInsets.symmetric(vertical: 0),
                   ),
@@ -157,35 +162,58 @@ class _ManageCatalogPageState extends ConsumerState<ManageCatalogPage> with Sing
                 color: AppColors.surfaceContainerLowest,
               ),
               child: DataTable(
-                headingRowColor: MaterialStateProperty.all(AppColors.surfaceContainerLow),
+                headingRowColor: MaterialStateProperty.all(
+                  AppColors.surfaceContainerLow,
+                ),
                 columns: const [
                   DataColumn(label: Text('CATEGORY NAME')),
                   DataColumn(label: Text('ITEMS')),
                   DataColumn(label: Text('STATUS')),
                   DataColumn(label: Text('ACTIONS')),
                 ],
-                rows: categories.map((cat) => DataRow(
-                  cells: [
-                    DataCell(Text(cat.name, style: const TextStyle(fontWeight: FontWeight.w600))),
-                    const DataCell(Text('N/A')), // Mock count since we don't fetch relation count easily yet
-                    DataCell(_buildStatusBadge('Active', true)),
-                    DataCell(Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.edit_outlined, size: 20),
-                          onPressed: () => _showCategoryDialog(cat),
-                          color: AppColors.onSurfaceVariant,
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.delete_outline, size: 20),
-                          onPressed: () => _deleteCategory(cat),
-                          color: AppColors.error,
-                        ),
-                      ],
-                    )),
-                  ],
-                )).toList(),
+                rows: categories
+                    .map(
+                      (cat) => DataRow(
+                        cells: [
+                          DataCell(
+                            Text(
+                              cat.name,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                          const DataCell(
+                            Text('N/A'),
+                          ), // Mock count since we don't fetch relation count easily yet
+                          DataCell(_buildStatusBadge('Active', true)),
+                          DataCell(
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.edit_outlined,
+                                    size: 20,
+                                  ),
+                                  onPressed: () => _showCategoryDialog(cat),
+                                  color: AppColors.onSurfaceVariant,
+                                ),
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.delete_outline,
+                                    size: 20,
+                                  ),
+                                  onPressed: () => _deleteCategory(cat),
+                                  color: AppColors.error,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                    .toList(),
               ),
             ),
           ],
@@ -198,8 +226,10 @@ class _ManageCatalogPageState extends ConsumerState<ManageCatalogPage> with Sing
 
   void _showCategoryDialog([Category? existingCategory]) {
     final isEditing = existingCategory != null;
-    final controller = TextEditingController(text: existingCategory?.name ?? '');
-    
+    final controller = TextEditingController(
+      text: existingCategory?.name ?? '',
+    );
+
     showDialog(
       context: context,
       builder: (context) {
@@ -207,7 +237,10 @@ class _ManageCatalogPageState extends ConsumerState<ManageCatalogPage> with Sing
           title: Text(isEditing ? 'Edit Category' : 'Add Category'),
           content: TextField(
             controller: controller,
-            decoration: const InputDecoration(labelText: 'Category Name', border: OutlineInputBorder()),
+            decoration: const InputDecoration(
+              labelText: 'Category Name',
+              border: OutlineInputBorder(),
+            ),
             autofocus: true,
           ),
           actions: [
@@ -216,17 +249,23 @@ class _ManageCatalogPageState extends ConsumerState<ManageCatalogPage> with Sing
               child: const Text('CANCEL'),
             ),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 final name = controller.text.trim();
                 if (name.isNotEmpty) {
                   if (isEditing) {
                     final updated = existingCategory.copyWith(name: name);
-                    ref.read(categoryProvider.notifier).updateCategory(updated);
+                    await ref
+                        .read(categoryProvider.notifier)
+                        .updateCategory(updated);
                   } else {
                     final newCategory = Category(name: name);
-                    ref.read(categoryProvider.notifier).createCategory(newCategory);
+                    await ref
+                        .read(categoryProvider.notifier)
+                        .createCategory(newCategory);
                   }
-                  Navigator.pop(context);
+                  if (context.mounted) {
+                    context.pop();
+                  }
                 }
               },
               child: Text(isEditing ? 'SAVE' : 'ADD'),
@@ -243,17 +282,26 @@ class _ManageCatalogPageState extends ConsumerState<ManageCatalogPage> with Sing
       builder: (context) {
         return AlertDialog(
           title: const Text('Delete Category'),
-          content: Text('Are you sure you want to delete the category "\${category.name}"? This action cannot be undone.'),
+          content: Text(
+            'Are you sure you want to delete the category "\${category.name}"? This action cannot be undone.',
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
               child: const Text('CANCEL'),
             ),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: AppColors.error, foregroundColor: Colors.white),
-              onPressed: () {
-                ref.read(categoryProvider.notifier).deleteCategory(category);
-                Navigator.pop(context);
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.error,
+                foregroundColor: Colors.white,
+              ),
+              onPressed: () async {
+                await ref
+                    .read(categoryProvider.notifier)
+                    .deleteCategory(category);
+                if (context.mounted) {
+                  context.pop();
+                }
               },
               child: const Text('DELETE'),
             ),
@@ -282,7 +330,7 @@ class _ManageCatalogPageState extends ConsumerState<ManageCatalogPage> with Sing
           itemBuilder: (context, index) {
             final book = books[index];
             return BookCard(
-              book: book, 
+              book: book,
               onTap: () {},
               onEdit: () => context.push('/admin/catalog/edit', extra: book),
               onDelete: () => _deleteBook(book),
@@ -301,14 +349,19 @@ class _ManageCatalogPageState extends ConsumerState<ManageCatalogPage> with Sing
       builder: (context) {
         return AlertDialog(
           title: const Text('Delete Book'),
-          content: Text('Are you sure you want to delete the book "${book.title}"? This action cannot be undone.'),
+          content: Text(
+            'Are you sure you want to delete the book "${book.title}"? This action cannot be undone.',
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
               child: const Text('CANCEL'),
             ),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: AppColors.error, foregroundColor: Colors.white),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.error,
+                foregroundColor: Colors.white,
+              ),
               onPressed: () {
                 ref.read(bookProvider.notifier).deleteBook(book);
                 Navigator.pop(context);
@@ -325,7 +378,9 @@ class _ManageCatalogPageState extends ConsumerState<ManageCatalogPage> with Sing
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: isActive ? AppColors.secondaryContainer : AppColors.surfaceContainerHigh,
+        color: isActive
+            ? AppColors.secondaryContainer
+            : AppColors.surfaceContainerHigh,
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(
@@ -334,7 +389,9 @@ class _ManageCatalogPageState extends ConsumerState<ManageCatalogPage> with Sing
           fontSize: 10,
           fontWeight: FontWeight.bold,
           letterSpacing: 1.2,
-          color: isActive ? AppColors.onSecondaryContainer : AppColors.onSurfaceVariant,
+          color: isActive
+              ? AppColors.onSecondaryContainer
+              : AppColors.onSurfaceVariant,
         ),
       ),
     );

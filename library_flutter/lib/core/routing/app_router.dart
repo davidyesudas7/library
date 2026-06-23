@@ -18,19 +18,19 @@ part 'app_router.g.dart';
 GoRouter appRouter(Ref ref) {
   final user = ref.watch(authProvider);
   final isLoggedIn = user != null;
-  final isAdmin = isLoggedIn && user.email == 'admin@library.com';
+  final isAdmin = isLoggedIn && user.scopeNames.contains('serverpod.admin');
 
   return GoRouter(
     initialLocation: '/',
     redirect: (context, state) {
       final isGoingToAdmin = state.matchedLocation.startsWith('/admin');
-      
+
       if (isGoingToAdmin && state.matchedLocation != '/admin/login') {
         if (!isAdmin) {
           return '/admin/login';
         }
       }
-      
+
       if (state.matchedLocation == '/admin/login' && isAdmin) {
         return '/admin';
       }
@@ -38,7 +38,7 @@ GoRouter appRouter(Ref ref) {
       if (state.matchedLocation == '/login' && isLoggedIn) {
         return '/';
       }
-      
+
       return null;
     },
     routes: [
@@ -50,7 +50,8 @@ GoRouter appRouter(Ref ref) {
         path: '/book/:id',
         builder: (context, state) {
           final id = int.tryParse(state.pathParameters['id'] ?? '') ?? 0;
-          final book = state.extra as Book?;
+          final extra = state.extra;
+          final book = extra is Book ? extra : null;
           return BookDetailPage(bookId: id, book: book);
         },
       ),
@@ -77,7 +78,8 @@ GoRouter appRouter(Ref ref) {
       GoRoute(
         path: '/admin/catalog/edit',
         builder: (context, state) {
-          final book = state.extra as Book?;
+          final extra = state.extra;
+          final book = extra is Book ? extra : null;
           return AddNewBookPage(existingBook: book);
         },
       ),

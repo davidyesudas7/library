@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:library_flutter/core/network/serverpod_client.dart';
 import 'package:library_flutter/core/theme/app_colors.dart';
 import 'package:library_flutter/features/library/presentation/providers/book_providers.dart';
 import 'package:library_flutter/features/library/presentation/providers/category_providers.dart';
@@ -30,7 +31,7 @@ class BookDetailPage extends ConsumerWidget {
       builder: (context) => UserActionDialog(
         title: 'Download PDF',
         actionLabel: 'DOWNLOAD',
-        onActionSuccess: () async {
+        onActionSuccess: (name, parish, email, phone) async {
           if (book?.pdfUrl == null || (book?.pdfUrl?.isEmpty ?? true)) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
@@ -38,6 +39,22 @@ class BookDetailPage extends ConsumerWidget {
               ),
             );
             return;
+          }
+
+          try {
+            // Save download request to backend
+            await client.downloadData.saveDownloadRequest(
+              DownloadedBook(
+                userName: name,
+                parish: parish,
+                email: email.isNotEmpty ? email : null,
+                phone: phone.isNotEmpty ? phone : null,
+                bookId: book!.id!,
+              ),
+            );
+          } catch (e) {
+            debugPrint('Error saving download request: $e');
+            // We still proceed with the download even if tracking fails.
           }
 
           final uri = Uri.parse(book!.pdfUrl!);
@@ -75,7 +92,7 @@ class BookDetailPage extends ConsumerWidget {
       builder: (context) => UserActionDialog(
         title: 'Request Physical Copy',
         actionLabel: 'REQUEST BOOK',
-        onActionSuccess: () {
+        onActionSuccess: (name, parish, email, phone) {
           _showSuccessSnackBar(
             context,
             'Your request has been sent to the librarian.',
@@ -162,11 +179,52 @@ class BookDetailPage extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 8),
-        Text(
-          book.author,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            color: AppColors.onSurfaceVariant,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              book.author,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: AppColors.onSurfaceVariant,
+              ),
+            ),
+            if (book.id != null)
+              FutureBuilder<int>(
+                future: client.downloadData.getBookDownloadCount(book.id!),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) return const SizedBox.shrink();
+                  return Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.secondaryContainer,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.download,
+                          size: 16,
+                          color: AppColors.onSecondaryContainer,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          '${snapshot.data} Downloads',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.onSecondaryContainer,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+          ],
         ),
         const SizedBox(height: 32),
         Text(

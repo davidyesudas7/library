@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:library_flutter/core/theme/app_colors.dart';
 import 'package:go_router/go_router.dart';
-import 'package:serverpod_auth_email_flutter/serverpod_auth_email_flutter.dart';
+import 'package:serverpod_auth_idp_flutter/serverpod_auth_idp_flutter.dart';
 import 'package:library_flutter/core/network/serverpod_client.dart';
 
 class AdminLoginPage extends StatefulWidget {
@@ -15,23 +15,27 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
+  bool _isPasswordVisible = false;
 
   Future<void> _login() async {
     if (_emailController.text.isEmpty || _passwordController.text.isEmpty) return;
     
     setState(() => _isLoading = true);
     
-    final authController = EmailAuthController(client.modules.auth);
-    final userInfo = await authController.signIn(_emailController.text, _passwordController.text);
+    final controller = EmailAuthController(client: client);
+    controller.emailController.text = _emailController.text;
+    controller.passwordController.text = _passwordController.text;
+    
+    await controller.login();
     
     if (mounted) {
       setState(() => _isLoading = false);
-      if (userInfo != null) {
+      if (controller.state == EmailAuthState.authenticated) {
         context.go('/admin');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Invalid credentials. Please try again.'),
+          SnackBar(
+            content: Text(controller.errorMessage ?? 'Invalid credentials. Please try again.'),
             backgroundColor: AppColors.error,
           ),
         );
@@ -71,12 +75,20 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
               const SizedBox(height: 16),
               TextField(
                 controller: _passwordController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Password',
-                  prefixIcon: Icon(Icons.lock),
-                  border: OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.lock),
+                  suffixIcon: IconButton(
+                    icon: Icon(_isPasswordVisible ? Icons.visibility : Icons.visibility_off),
+                    onPressed: () {
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible;
+                      });
+                    },
+                  ),
+                  border: const OutlineInputBorder(),
                 ),
-                obscureText: true,
+                obscureText: !_isPasswordVisible,
                 onSubmitted: (_) => _login(),
               ),
               const SizedBox(height: 24),

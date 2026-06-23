@@ -132,7 +132,7 @@ final class BookNotifierProvider
         argument: null,
         retry: null,
         name: r'bookProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -145,7 +145,7 @@ final class BookNotifierProvider
   BookNotifier create() => BookNotifier();
 }
 
-String _$bookNotifierHash() => r'13a471ba59a7942fb3d4c18bcd53ebc914890851';
+String _$bookNotifierHash() => r'2f5026f83b0b6b808175e0c6b1e8edf1d6cddcb8';
 
 abstract class _$BookNotifier extends $AsyncNotifier<void> {
   FutureOr<void> build();

@@ -14,7 +14,7 @@ Future<List<Category>> categories(Ref ref) async {
   );
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 class CategoryNotifier extends _$CategoryNotifier {
   @override
   Future<void> build() async {}
