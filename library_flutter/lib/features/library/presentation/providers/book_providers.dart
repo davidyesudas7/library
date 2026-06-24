@@ -7,7 +7,7 @@ part 'book_providers.g.dart';
 @riverpod
 Future<List<Book>> books(Ref ref) async {
   final repository = ref.watch(bookRepositoryProvider);
-  final result = await repository.getAllBooks();
+  final result = await repository.getBooks();
   return result.fold(
     (failure) => throw Exception(failure),
     (books) => books,
@@ -15,9 +15,9 @@ Future<List<Book>> books(Ref ref) async {
 }
 
 @riverpod
-Future<List<Book>> booksByCategory(Ref ref, int categoryId) async {
+Future<List<Book>> filteredBooks(Ref ref, {int? categoryId, String? searchQuery}) async {
   final repository = ref.watch(bookRepositoryProvider);
-  final result = await repository.getBooksByCategory(categoryId);
+  final result = await repository.getBooks(categoryId: categoryId, searchQuery: searchQuery);
   return result.fold(
     (failure) => throw Exception(failure),
     (books) => books,

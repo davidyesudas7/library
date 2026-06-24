@@ -70,32 +70,28 @@ class Endpoints extends _i1.EndpointDispatch {
       name: 'book',
       endpoint: endpoints['book']!,
       methodConnectors: {
-        'getAll': _i1.MethodConnector(
-          name: 'getAll',
-          params: {},
-          call:
-              (
-                _i1.Session session,
-                Map<String, dynamic> params,
-              ) async =>
-                  (endpoints['book'] as _i2.BookEndpoint).getAll(session),
-        ),
-        'getByCategory': _i1.MethodConnector(
-          name: 'getByCategory',
+        'getBooks': _i1.MethodConnector(
+          name: 'getBooks',
           params: {
             'categoryId': _i1.ParameterDescription(
               name: 'categoryId',
-              type: _i1.getType<int>(),
-              nullable: false,
+              type: _i1.getType<int?>(),
+              nullable: true,
+            ),
+            'searchQuery': _i1.ParameterDescription(
+              name: 'searchQuery',
+              type: _i1.getType<String?>(),
+              nullable: true,
             ),
           },
           call:
               (
                 _i1.Session session,
                 Map<String, dynamic> params,
-              ) async => (endpoints['book'] as _i2.BookEndpoint).getByCategory(
+              ) async => (endpoints['book'] as _i2.BookEndpoint).getBooks(
                 session,
                 params['categoryId'],
+                params['searchQuery'],
               ),
         ),
         'create': _i1.MethodConnector(

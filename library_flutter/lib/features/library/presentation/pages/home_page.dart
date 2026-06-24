@@ -35,7 +35,12 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final booksAsync = ref.watch(booksProvider);
+    final booksAsync = ref.watch(
+      filteredBooksProvider(
+        categoryId: _selectedCategoryId,
+        searchQuery: _searchQuery.isEmpty ? null : _searchQuery,
+      ),
+    );
     final categoriesAsync = ref.watch(categoriesProvider);
     final isDesktop = MediaQuery.of(context).size.width >= 800;
 
@@ -88,68 +93,58 @@ class _HomePageState extends ConsumerState<HomePage> {
           if (isDesktop) _buildSidebar(categoriesAsync),
           // Book Grid
           Expanded(
-            child: booksAsync.when(
-              data: (books) {
-                var filteredBooks = books.where((book) {
-                  if (_selectedCategoryId != null &&
-                      book.categoryId != _selectedCategoryId)
-                    return false;
-                  if (!_filterOnline && book.isAvailableOnline) return false;
-
-                  bool matchesAvail = false;
-                  if (_filterOnline && book.isAvailableOnline)
-                    matchesAvail = true;
-                  if (_filterOffline && book.isAvailableOffline)
-                    matchesAvail = true;
-
-                  if (!matchesAvail) return false;
-
-                  if (_searchQuery.isNotEmpty) {
-                    final query = _searchQuery.toLowerCase();
-                    if (!book.title.toLowerCase().contains(query) &&
-                        !book.author.toLowerCase().contains(query)) {
-                      return false;
-                    }
-                  }
-
-                  return true;
-                }).toList();
-
-                if (filteredBooks.isEmpty) {
-                  return const Center(
-                    child: Text('No books found matching criteria.'),
-                  );
-                }
-
-                // Determine columns based on width
-                final screenWidth = MediaQuery.of(context).size.width;
-                int columns = 4;
-                if (screenWidth < 600)
-                  columns = 2;
-                else if (screenWidth < 900)
-                  columns = 3;
-
-                return Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
-                      child: TextField(
-                        controller: _searchController,
-                        onChanged: (value) => setState(() => _searchQuery = value),
-                        decoration: InputDecoration(
-                          hintText: 'Search by title or author...',
-                          prefixIcon: const Icon(Icons.search),
-                          filled: true,
-                          fillColor: AppColors.surfaceContainerLowest,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide.none,
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                        ),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+                  child: TextField(
+                    controller: _searchController,
+                    onChanged: (value) => setState(() => _searchQuery = value),
+                    decoration: InputDecoration(
+                      hintText: 'Search by title or author...',
+                      prefixIcon: const Icon(Icons.search),
+                      filled: true,
+                      fillColor: AppColors.surfaceContainerLowest,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
                       ),
                     ),
-                    Expanded(
+                  ),
+                ),
+
+                booksAsync.when(
+                  data: (books) {
+                    var filteredBooks = books.where((book) {
+                      if (!_filterOnline && book.isAvailableOnline)
+                        return false;
+
+                      bool matchesAvail = false;
+                      if (_filterOnline && book.isAvailableOnline)
+                        matchesAvail = true;
+                      if (_filterOffline && book.isAvailableOffline)
+                        matchesAvail = true;
+
+                      if (!matchesAvail) return false;
+
+                      return true;
+                    }).toList();
+                    // Determine columns based on width
+                    final screenWidth = MediaQuery.of(context).size.width;
+                    int columns = 4;
+                    if (screenWidth < 600)
+                      columns = 2;
+                    else if (screenWidth < 900)
+                      columns = 3;
+                    if (books.isEmpty) {
+                      return const Center(
+                        child: Text('No books found.'),
+                      );
+                    }
+                    return Expanded(
                       child: GridView.builder(
                         padding: const EdgeInsets.all(24),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -165,18 +160,23 @@ class _HomePageState extends ConsumerState<HomePage> {
                             book: book,
                             onTap: () {
                               if (book.id != null) {
-                                context.push('/book/${book.id}', extra: book);
+                                context.push(
+                                  '/book/${book.id}',
+                                  extra: book,
+                                );
                               }
                             },
                           );
                         },
                       ),
-                    ),
-                  ],
-                );
-              },
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (err, _) => Center(child: Text('Error: \$err')),
+                    );
+                  },
+                  loading: () => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  error: (err, _) => Center(child: Text('Error: \$err')),
+                ),
+              ],
             ),
           ),
         ],

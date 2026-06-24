@@ -28,19 +28,17 @@ class EndpointBook extends _i1.EndpointRef {
   @override
   String get name => 'book';
 
-  _i2.Future<List<_i3.Book>> getAll() =>
-      caller.callServerEndpoint<List<_i3.Book>>(
-        'book',
-        'getAll',
-        {},
-      );
-
-  _i2.Future<List<_i3.Book>> getByCategory(int categoryId) =>
-      caller.callServerEndpoint<List<_i3.Book>>(
-        'book',
-        'getByCategory',
-        {'categoryId': categoryId},
-      );
+  _i2.Future<List<_i3.Book>> getBooks(
+    int? categoryId,
+    String? searchQuery,
+  ) => caller.callServerEndpoint<List<_i3.Book>>(
+    'book',
+    'getBooks',
+    {
+      'categoryId': categoryId,
+      'searchQuery': searchQuery,
+    },
+  );
 
   _i2.Future<_i3.Book> create(_i3.Book book) =>
       caller.callServerEndpoint<_i3.Book>(

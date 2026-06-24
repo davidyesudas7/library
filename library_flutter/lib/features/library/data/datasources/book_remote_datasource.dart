@@ -15,12 +15,8 @@ class BookRemoteDataSource {
 
   BookRemoteDataSource(this._client);
 
-  Future<List<Book>> getAllBooks() async {
-    return await _client.book.getAll();
-  }
-
-  Future<List<Book>> getBooksByCategory(int categoryId) async {
-    return await _client.book.getByCategory(categoryId);
+  Future<List<Book>> getBooks({int? categoryId, String? searchQuery}) async {
+    return await _client.book.getBooks(categoryId, searchQuery);
   }
 
   Future<Book> createBook(Book book) async {

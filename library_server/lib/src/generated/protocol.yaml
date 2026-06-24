@@ -1,6 +1,5 @@
 book:
-  - getAll:
-  - getByCategory:
+  - getBooks:
   - create:
   - update:
   - delete:

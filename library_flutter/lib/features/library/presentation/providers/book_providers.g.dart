@@ -45,12 +45,12 @@ final class BooksProvider
   }
 }
 
-String _$booksHash() => r'cbf213432d3d1cc19543bc858d278da65ca60a5e';
+String _$booksHash() => r'a0040ea4a2abf56fbbe2c7c0c801761bff7a4abe';
 
-@ProviderFor(booksByCategory)
-final booksByCategoryProvider = BooksByCategoryFamily._();
+@ProviderFor(filteredBooks)
+final filteredBooksProvider = FilteredBooksFamily._();
 
-final class BooksByCategoryProvider
+final class FilteredBooksProvider
     extends
         $FunctionalProvider<
           AsyncValue<List<Book>>,
@@ -58,25 +58,25 @@ final class BooksByCategoryProvider
           FutureOr<List<Book>>
         >
     with $FutureModifier<List<Book>>, $FutureProvider<List<Book>> {
-  BooksByCategoryProvider._({
-    required BooksByCategoryFamily super.from,
-    required int super.argument,
+  FilteredBooksProvider._({
+    required FilteredBooksFamily super.from,
+    required ({int? categoryId, String? searchQuery}) super.argument,
   }) : super(
          retry: null,
-         name: r'booksByCategoryProvider',
+         name: r'filteredBooksProvider',
          isAutoDispose: true,
          dependencies: null,
          $allTransitiveDependencies: null,
        );
 
   @override
-  String debugGetCreateSourceHash() => _$booksByCategoryHash();
+  String debugGetCreateSourceHash() => _$filteredBooksHash();
 
   @override
   String toString() {
-    return r'booksByCategoryProvider'
+    return r'filteredBooksProvider'
         ''
-        '($argument)';
+        '$argument';
   }
 
   @$internal
@@ -86,13 +86,17 @@ final class BooksByCategoryProvider
 
   @override
   FutureOr<List<Book>> create(Ref ref) {
-    final argument = this.argument as int;
-    return booksByCategory(ref, argument);
+    final argument = this.argument as ({int? categoryId, String? searchQuery});
+    return filteredBooks(
+      ref,
+      categoryId: argument.categoryId,
+      searchQuery: argument.searchQuery,
+    );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is BooksByCategoryProvider && other.argument == argument;
+    return other is FilteredBooksProvider && other.argument == argument;
   }
 
   @override
@@ -101,24 +105,31 @@ final class BooksByCategoryProvider
   }
 }
 
-String _$booksByCategoryHash() => r'cc1dabab38a83e85931d68c949a7d43fb630e298';
+String _$filteredBooksHash() => r'741838b1a00f0e01c324a50db306ccb52d8ed570';
 
-final class BooksByCategoryFamily extends $Family
-    with $FunctionalFamilyOverride<FutureOr<List<Book>>, int> {
-  BooksByCategoryFamily._()
+final class FilteredBooksFamily extends $Family
+    with
+        $FunctionalFamilyOverride<
+          FutureOr<List<Book>>,
+          ({int? categoryId, String? searchQuery})
+        > {
+  FilteredBooksFamily._()
     : super(
         retry: null,
-        name: r'booksByCategoryProvider',
+        name: r'filteredBooksProvider',
         dependencies: null,
         $allTransitiveDependencies: null,
         isAutoDispose: true,
       );
 
-  BooksByCategoryProvider call(int categoryId) =>
-      BooksByCategoryProvider._(argument: categoryId, from: this);
+  FilteredBooksProvider call({int? categoryId, String? searchQuery}) =>
+      FilteredBooksProvider._(
+        argument: (categoryId: categoryId, searchQuery: searchQuery),
+        from: this,
+      );
 
   @override
-  String toString() => r'booksByCategoryProvider';
+  String toString() => r'filteredBooksProvider';
 }
 
 @ProviderFor(BookNotifier)

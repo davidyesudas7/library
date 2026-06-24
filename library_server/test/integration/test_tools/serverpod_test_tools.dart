@@ -190,52 +190,26 @@ class _BookEndpoint {
 
   final _i2.SerializationManager _serializationManager;
 
-  _i3.Future<List<_i4.Book>> getAll(
+  _i3.Future<List<_i4.Book>> getBooks(
     _i1.TestSessionBuilder sessionBuilder,
+    int? categoryId,
+    String? searchQuery,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
           (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
             endpoint: 'book',
-            method: 'getAll',
+            method: 'getBooks',
           );
       try {
         var _localCallContext = await _endpointDispatch.getMethodCallContext(
           createSessionCallback: (_) => _localUniqueSession,
           endpointPath: 'book',
-          methodName: 'getAll',
-          parameters: _i1.testObjectToJson({}),
-          serializationManager: _serializationManager,
-        );
-        var _localReturnValue =
-            await (_localCallContext.method.call(
-                  _localUniqueSession,
-                  _localCallContext.arguments,
-                )
-                as _i3.Future<List<_i4.Book>>);
-        return _localReturnValue;
-      } finally {
-        await _localUniqueSession.close();
-      }
-    });
-  }
-
-  _i3.Future<List<_i4.Book>> getByCategory(
-    _i1.TestSessionBuilder sessionBuilder,
-    int categoryId,
-  ) async {
-    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
-      var _localUniqueSession =
-          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
-            endpoint: 'book',
-            method: 'getByCategory',
-          );
-      try {
-        var _localCallContext = await _endpointDispatch.getMethodCallContext(
-          createSessionCallback: (_) => _localUniqueSession,
-          endpointPath: 'book',
-          methodName: 'getByCategory',
-          parameters: _i1.testObjectToJson({'categoryId': categoryId}),
+          methodName: 'getBooks',
+          parameters: _i1.testObjectToJson({
+            'categoryId': categoryId,
+            'searchQuery': searchQuery,
+          }),
           serializationManager: _serializationManager,
         );
         var _localReturnValue =

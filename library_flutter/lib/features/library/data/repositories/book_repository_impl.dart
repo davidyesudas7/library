@@ -18,22 +18,12 @@ class BookRepositoryImpl implements BookRepository {
   BookRepositoryImpl(this._remoteDataSource);
 
   @override
-  Future<Either<String, List<Book>>> getAllBooks() async {
+  Future<Either<String, List<Book>>> getBooks({int? categoryId, String? searchQuery}) async {
     try {
-      final books = await _remoteDataSource.getAllBooks();
+      final books = await _remoteDataSource.getBooks(categoryId: categoryId, searchQuery: searchQuery);
       return Right(books);
     } catch (e) {
       return Left('Failed to fetch books: \${e.toString()}');
-    }
-  }
-
-  @override
-  Future<Either<String, List<Book>>> getBooksByCategory(int categoryId) async {
-    try {
-      final books = await _remoteDataSource.getBooksByCategory(categoryId);
-      return Right(books);
-    } catch (e) {
-      return Left('Failed to fetch books by category: \${e.toString()}');
     }
   }
 

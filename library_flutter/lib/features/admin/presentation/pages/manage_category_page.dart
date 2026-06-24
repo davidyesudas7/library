@@ -104,7 +104,9 @@ class _ManageCategoryPageState extends ConsumerState<ManageCategoryPage> {
                   fillColor: AppColors.surfaceContainerLowest,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(4),
-                    borderSide: const BorderSide(color: AppColors.outlineVariant),
+                    borderSide: const BorderSide(
+                      color: AppColors.outlineVariant,
+                    ),
                   ),
                 ),
               ),
@@ -126,7 +128,9 @@ class _ManageCategoryPageState extends ConsumerState<ManageCategoryPage> {
   }
 
   Widget _buildBooksTable() {
-    final booksAsync = ref.watch(booksByCategoryProvider(widget.categoryId));
+    final booksAsync = ref.watch(
+      filteredBooksProvider(categoryId: widget.categoryId),
+    );
 
     return booksAsync.when(
       data: (books) {
@@ -140,7 +144,9 @@ class _ManageCategoryPageState extends ConsumerState<ManageCategoryPage> {
             color: AppColors.surfaceContainerLowest,
           ),
           child: DataTable(
-            headingRowColor: MaterialStateProperty.all(AppColors.surfaceContainerLow),
+            headingRowColor: WidgetStateProperty.all(
+              AppColors.surfaceContainerLow,
+            ),
             dataRowMaxHeight: 80,
             columns: const [
               DataColumn(label: Text('COVER')),
@@ -149,42 +155,68 @@ class _ManageCategoryPageState extends ConsumerState<ManageCategoryPage> {
               DataColumn(label: Text('AVAILABILITY')),
               DataColumn(label: Text('ACTIONS')),
             ],
-            rows: books.map((book) => DataRow(
-              cells: [
-                DataCell(
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
-                      child: book.imageUrl != null
-                          ? Image.network(book.imageUrl!, width: 40, height: 60, fit: BoxFit.cover)
-                          : Container(width: 40, height: 60, color: AppColors.surfaceContainerHigh),
-                    ),
+            rows: books
+                .map(
+                  (book) => DataRow(
+                    cells: [
+                      DataCell(
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(4),
+                            child: book.imageUrl != null
+                                ? Image.network(
+                                    book.imageUrl!,
+                                    width: 40,
+                                    height: 60,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Container(
+                                    width: 40,
+                                    height: 60,
+                                    color: AppColors.surfaceContainerHigh,
+                                  ),
+                          ),
+                        ),
+                      ),
+                      DataCell(
+                        Text(
+                          book.title,
+                          style: const TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      DataCell(Text(book.author)),
+                      DataCell(_buildAvailabilityBadge(book)),
+                      DataCell(
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.edit_outlined, size: 20),
+                              onPressed: () {},
+                              color: AppColors.onSurfaceVariant,
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete_outline, size: 20),
+                              onPressed: () async {
+                                await ref
+                                    .read(bookProvider.notifier)
+                                    .deleteBook(book);
+                                ref.invalidate(
+                                  filteredBooksProvider(
+                                    categoryId: widget.categoryId,
+                                  ),
+                                );
+                              },
+                              color: AppColors.error,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                DataCell(Text(book.title, style: const TextStyle(fontWeight: FontWeight.w600))),
-                DataCell(Text(book.author)),
-                DataCell(_buildAvailabilityBadge(book)),
-                DataCell(Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.edit_outlined, size: 20),
-                      onPressed: () {},
-                      color: AppColors.onSurfaceVariant,
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.delete_outline, size: 20),
-                      onPressed: () async {
-                        await ref.read(bookProvider.notifier).deleteBook(book);
-                        ref.invalidate(booksByCategoryProvider(widget.categoryId));
-                      },
-                      color: AppColors.error,
-                    ),
-                  ],
-                )),
-              ],
-            )).toList(),
+                )
+                .toList(),
           ),
         );
       },
@@ -204,8 +236,12 @@ class _ManageCategoryPageState extends ConsumerState<ManageCategoryPage> {
   }
 
   Widget _buildStatusBadge(String text, bool isOnline) {
-    final color = isOnline ? AppColors.secondaryContainer : AppColors.primaryContainer;
-    final textColor = isOnline ? AppColors.onSecondaryContainer : AppColors.onPrimaryContainer;
+    final color = isOnline
+        ? AppColors.secondaryContainer
+        : AppColors.primaryContainer;
+    final textColor = isOnline
+        ? AppColors.onSecondaryContainer
+        : AppColors.onPrimaryContainer;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -242,7 +278,10 @@ class _ManageCategoryPageState extends ConsumerState<ManageCategoryPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Quick Add Book', style: Theme.of(context).textTheme.titleLarge),
+                Text(
+                  'Quick Add Book',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
                 IconButton(
                   icon: const Icon(Icons.close),
                   onPressed: () => setState(() => _isAddBookOpen = false),
