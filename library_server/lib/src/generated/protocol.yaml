@@ -5,6 +5,7 @@ book:
   - delete:
 category:
   - getAll:
+  - searchCategories:
   - create:
   - update:
   - delete:

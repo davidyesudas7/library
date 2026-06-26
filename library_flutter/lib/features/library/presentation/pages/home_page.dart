@@ -41,7 +41,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         searchQuery: _searchQuery.isEmpty ? null : _searchQuery,
       ),
     );
-    final categoriesAsync = ref.watch(categoriesProvider);
+    final categoriesAsync = ref.watch(categoriesProvider());
     final isDesktop = MediaQuery.of(context).size.width >= 800;
 
     final user = ref.watch(authProvider);

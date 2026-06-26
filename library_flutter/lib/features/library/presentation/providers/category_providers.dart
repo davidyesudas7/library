@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:library_client/library_client.dart';
 import '../../data/repositories/category_repository_impl.dart';
@@ -5,12 +7,17 @@ import '../../data/repositories/category_repository_impl.dart';
 part 'category_providers.g.dart';
 
 @riverpod
-Future<List<Category>> categories(Ref ref) async {
+Future<List<Category>> categories(Ref ref, {String? query}) async {
   final repository = ref.watch(categoryRepositoryProvider);
-  final result = await repository.getAllCategories();
+
+  final result = query == null || query.isEmpty
+      ? await repository.getAllCategories()
+      : await repository.searchCategories(query);
   return result.fold(
     (failure) => throw Exception(failure),
-    (categories) => categories,
+    (categories) {
+      return categories;
+    },
   );
 }
 

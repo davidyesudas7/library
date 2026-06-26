@@ -10,7 +10,7 @@ part of 'category_providers.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(categories)
-final categoriesProvider = CategoriesProvider._();
+final categoriesProvider = CategoriesFamily._();
 
 final class CategoriesProvider
     extends
@@ -20,19 +20,26 @@ final class CategoriesProvider
           FutureOr<List<Category>>
         >
     with $FutureModifier<List<Category>>, $FutureProvider<List<Category>> {
-  CategoriesProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'categoriesProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+  CategoriesProvider._({
+    required CategoriesFamily super.from,
+    required String? super.argument,
+  }) : super(
+         retry: null,
+         name: r'categoriesProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$categoriesHash();
+
+  @override
+  String toString() {
+    return r'categoriesProvider'
+        ''
+        '($argument)';
+  }
 
   @$internal
   @override
@@ -42,11 +49,40 @@ final class CategoriesProvider
 
   @override
   FutureOr<List<Category>> create(Ref ref) {
-    return categories(ref);
+    final argument = this.argument as String?;
+    return categories(ref, query: argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is CategoriesProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
   }
 }
 
-String _$categoriesHash() => r'c88e7f57b39a34919c0609c99fa98ed89210d0b3';
+String _$categoriesHash() => r'2b7d41f402dbb585fd138e7a787c912639852378';
+
+final class CategoriesFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<List<Category>>, String?> {
+  CategoriesFamily._()
+    : super(
+        retry: null,
+        name: r'categoriesProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  CategoriesProvider call({String? query}) =>
+      CategoriesProvider._(argument: query, from: this);
+
+  @override
+  String toString() => r'categoriesProvider';
+}
 
 @ProviderFor(CategoryNotifier)
 final categoryProvider = CategoryNotifierProvider._();

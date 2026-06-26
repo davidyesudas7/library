@@ -104,7 +104,7 @@ class BookDetailPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final booksAsync = ref.watch(booksProvider);
+    final booksAsync = ref.watch(filteredBooksProvider());
 
     return Scaffold(
       appBar: AppBar(
@@ -330,7 +330,7 @@ class BookDetailPage extends ConsumerWidget {
   }
 
   Widget _buildCategoryLabel(WidgetRef ref, int categoryId) {
-    final categoriesAsync = ref.watch(categoriesProvider);
+    final categoriesAsync = ref.watch(categoriesProvider());
     return categoriesAsync.when(
       data: (categories) {
         final category = categories.firstWhere(

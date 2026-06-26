@@ -7,30 +7,21 @@ class BookEndpoint extends Endpoint {
     int? categoryId,
     String? searchQuery,
   ) async {
-    if (categoryId == null && searchQuery == null) {
-      return await Book.db.find(
-        session,
-        include: Book.include(category: Category.include()),
-      );
-    }
-    if (categoryId != null && searchQuery == null) {
-      return await Book.db.find(
-        session,
-        where: (t) => t.categoryId.equals(categoryId),
-        include: Book.include(category: Category.include()),
-      );
-    }
-    if (categoryId == null && searchQuery != null) {
-      return await Book.db.find(
-        session,
-        where: (t) => t.title.ilike('%$searchQuery%'),
-        include: Book.include(category: Category.include()),
-      );
-    }
     return await Book.db.find(
       session,
-      where: (t) =>
-          t.categoryId.equals(categoryId) & t.title.ilike('%$searchQuery%'),
+      where: (categoryId != null || searchQuery != null)
+          ? (t) {
+              Expression? where;
+              if (categoryId != null) {
+                where = t.categoryId.equals(categoryId);
+              }
+              if (searchQuery != null) {
+                final searchExpr = t.title.ilike('%$searchQuery%');
+                where = where != null ? (where & searchExpr) : searchExpr;
+              }
+              return where!;
+            }
+          : null,
       include: Book.include(category: Category.include()),
     );
   }

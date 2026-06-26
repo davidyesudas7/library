@@ -20,11 +20,16 @@ class ManageCatalogPage extends ConsumerStatefulWidget {
 class _ManageCatalogPageState extends ConsumerState<ManageCatalogPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-
+  String? _searchQuery;
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) {
+        _searchQuery = null;
+      }
+    });
   }
 
   @override
@@ -103,6 +108,11 @@ class _ManageCatalogPageState extends ConsumerState<ManageCatalogPage>
             children: [
               Expanded(
                 child: TextField(
+                  onChanged: (value) {
+                    setState(() {
+                      _searchQuery = value.isEmpty ? null : value;
+                    });
+                  },
                   decoration: InputDecoration(
                     hintText: 'Search catalog...',
                     prefixIcon: const Icon(Icons.search),
@@ -146,7 +156,7 @@ class _ManageCatalogPageState extends ConsumerState<ManageCatalogPage>
   }
 
   Widget _buildCategoriesTab() {
-    final categoriesAsync = ref.watch(categoriesProvider);
+    final categoriesAsync = ref.watch(categoriesProvider(query: _searchQuery));
     return categoriesAsync.when(
       data: (categories) {
         if (categories.isEmpty) {
@@ -162,7 +172,7 @@ class _ManageCatalogPageState extends ConsumerState<ManageCatalogPage>
                 color: AppColors.surfaceContainerLowest,
               ),
               child: DataTable(
-                headingRowColor: MaterialStateProperty.all(
+                headingRowColor: WidgetStateProperty.all(
                   AppColors.surfaceContainerLow,
                 ),
                 columns: const [
@@ -312,7 +322,9 @@ class _ManageCatalogPageState extends ConsumerState<ManageCatalogPage>
   }
 
   Widget _buildBooksTab() {
-    final booksAsync = ref.watch(booksProvider);
+    final booksAsync = ref.watch(
+      filteredBooksProvider(searchQuery: _searchQuery),
+    );
     return booksAsync.when(
       data: (books) {
         if (books.isEmpty) {

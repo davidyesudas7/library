@@ -76,6 +76,13 @@ class EndpointCategory extends _i1.EndpointRef {
         {},
       );
 
+  _i2.Future<List<_i4.Category>> searchCategories(String query) =>
+      caller.callServerEndpoint<List<_i4.Category>>(
+        'category',
+        'searchCategories',
+        {'query': query},
+      );
+
   _i2.Future<_i4.Category> create(_i4.Category category) =>
       caller.callServerEndpoint<_i4.Category>(
         'category',

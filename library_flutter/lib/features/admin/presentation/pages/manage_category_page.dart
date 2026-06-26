@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:library_client/library_client.dart';
@@ -20,10 +22,11 @@ class ManageCategoryPage extends ConsumerStatefulWidget {
 
 class _ManageCategoryPageState extends ConsumerState<ManageCategoryPage> {
   bool _isAddBookOpen = false;
+  String? _searchQuery;
 
   @override
   Widget build(BuildContext context) {
-    final categoriesAsync = ref.watch(categoriesProvider);
+    final categoriesAsync = ref.watch(categoriesProvider());
     final category = categoriesAsync.value?.firstWhere(
       (c) => c.id == widget.categoryId,
       orElse: () => Category(name: 'Unknown Category'),
@@ -39,6 +42,7 @@ class _ManageCategoryPageState extends ConsumerState<ManageCategoryPage> {
                 AdminTopBar(title: 'Manage ${category?.name ?? 'Category'}'),
                 Expanded(
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
                         child: SingleChildScrollView(
@@ -86,9 +90,11 @@ class _ManageCategoryPageState extends ConsumerState<ManageCategoryPage> {
               style: Theme.of(context).textTheme.headlineLarge,
             ),
             ElevatedButton.icon(
-              onPressed: () => setState(() => _isAddBookOpen = !_isAddBookOpen),
-              icon: Icon(_isAddBookOpen ? Icons.close : Icons.add, size: 18),
-              label: Text(_isAddBookOpen ? 'CLOSE' : 'ADD NEW BOOK'),
+              onPressed: () {
+                context.push('/admin/catalog/new');
+              },
+              icon: const Icon(Icons.add, size: 18),
+              label: const Text('ADD NEW BOOK'),
             ),
           ],
         ),
@@ -97,6 +103,12 @@ class _ManageCategoryPageState extends ConsumerState<ManageCategoryPage> {
           children: [
             Expanded(
               child: TextField(
+                onChanged: (value) {
+                  log("the value is changed $value");
+                  setState(() {
+                    _searchQuery = value.isEmpty ? null : value;
+                  });
+                },
                 decoration: InputDecoration(
                   hintText: 'Search books...',
                   prefixIcon: const Icon(Icons.search),
@@ -129,7 +141,10 @@ class _ManageCategoryPageState extends ConsumerState<ManageCategoryPage> {
 
   Widget _buildBooksTable() {
     final booksAsync = ref.watch(
-      filteredBooksProvider(categoryId: widget.categoryId),
+      filteredBooksProvider(
+        categoryId: widget.categoryId,
+        searchQuery: _searchQuery,
+      ),
     );
 
     return booksAsync.when(
@@ -137,6 +152,7 @@ class _ManageCategoryPageState extends ConsumerState<ManageCategoryPage> {
         if (books.isEmpty) {
           return const Center(child: Text('No books in this category.'));
         }
+        log("the books are ${books.first.title}");
         return Container(
           decoration: BoxDecoration(
             border: Border.all(color: AppColors.outlineVariant),
@@ -193,11 +209,19 @@ class _ManageCategoryPageState extends ConsumerState<ManageCategoryPage> {
                           children: [
                             IconButton(
                               icon: const Icon(Icons.edit_outlined, size: 20),
-                              onPressed: () {},
+                              onPressed: () {
+                                context.push(
+                                  '/admin/catalog/edit',
+                                  extra: book,
+                                );
+                              },
                               color: AppColors.onSurfaceVariant,
                             ),
                             IconButton(
-                              icon: const Icon(Icons.delete_outline, size: 20),
+                              icon: const Icon(
+                                Icons.delete_outline,
+                                size: 20,
+                              ),
                               onPressed: () async {
                                 await ref
                                     .read(bookProvider.notifier)
@@ -205,6 +229,7 @@ class _ManageCategoryPageState extends ConsumerState<ManageCategoryPage> {
                                 ref.invalidate(
                                   filteredBooksProvider(
                                     categoryId: widget.categoryId,
+                                    searchQuery: _searchQuery,
                                   ),
                                 );
                               },

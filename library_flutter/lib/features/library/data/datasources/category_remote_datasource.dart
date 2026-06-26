@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:library_client/library_client.dart';
 import 'package:library_flutter/core/network/api_client.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -17,6 +19,10 @@ class CategoryRemoteDataSource {
 
   Future<List<Category>> getAllCategories() async {
     return await _client.category.getAll();
+  }
+
+  Future<List<Category>> searchCategories(String query) async {
+    return await _client.category.searchCategories(query);
   }
 
   Future<Category> createCategory(Category category) async {

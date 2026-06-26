@@ -28,6 +28,16 @@ class CategoryRepositoryImpl implements CategoryRepository {
   }
 
   @override
+  Future<Either<String, List<Category>>> searchCategories(String query) async {
+    try {
+      final categories = await _remoteDataSource.searchCategories(query);
+      return Right(categories);
+    } catch (e) {
+      return Left('Failed to search categories: \${e.toString()}');
+    }
+  }
+
+  @override
   Future<Either<String, Category>> createCategory(Category category) async {
     try {
       final createdCategory = await _remoteDataSource.createCategory(category);

@@ -165,6 +165,25 @@ class Endpoints extends _i1.EndpointDispatch {
                 session,
               ),
         ),
+        'searchCategories': _i1.MethodConnector(
+          name: 'searchCategories',
+          params: {
+            'query': _i1.ParameterDescription(
+              name: 'query',
+              type: _i1.getType<String>(),
+              nullable: false,
+            ),
+          },
+          call:
+              (
+                _i1.Session session,
+                Map<String, dynamic> params,
+              ) async => (endpoints['category'] as _i3.CategoryEndpoint)
+                  .searchCategories(
+                    session,
+                    params['query'],
+                  ),
+        ),
         'create': _i1.MethodConnector(
           name: 'create',
           params: {

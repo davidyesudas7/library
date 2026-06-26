@@ -9,44 +9,6 @@ part of 'book_providers.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(books)
-final booksProvider = BooksProvider._();
-
-final class BooksProvider
-    extends
-        $FunctionalProvider<
-          AsyncValue<List<Book>>,
-          List<Book>,
-          FutureOr<List<Book>>
-        >
-    with $FutureModifier<List<Book>>, $FutureProvider<List<Book>> {
-  BooksProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'booksProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$booksHash();
-
-  @$internal
-  @override
-  $FutureProviderElement<List<Book>> $createElement($ProviderPointer pointer) =>
-      $FutureProviderElement(pointer);
-
-  @override
-  FutureOr<List<Book>> create(Ref ref) {
-    return books(ref);
-  }
-}
-
-String _$booksHash() => r'a0040ea4a2abf56fbbe2c7c0c801761bff7a4abe';
-
 @ProviderFor(filteredBooks)
 final filteredBooksProvider = FilteredBooksFamily._();
 
@@ -105,7 +67,7 @@ final class FilteredBooksProvider
   }
 }
 
-String _$filteredBooksHash() => r'741838b1a00f0e01c324a50db306ccb52d8ed570';
+String _$filteredBooksHash() => r'c1aacc710fd8d9ad0bc4aef47e0d51fc950db326';
 
 final class FilteredBooksFamily extends $Family
     with
@@ -156,7 +118,7 @@ final class BookNotifierProvider
   BookNotifier create() => BookNotifier();
 }
 
-String _$bookNotifierHash() => r'2f5026f83b0b6b808175e0c6b1e8edf1d6cddcb8';
+String _$bookNotifierHash() => r'd8029388a565b412dd62df82c38d2d7c8fbb1f58';
 
 abstract class _$BookNotifier extends $AsyncNotifier<void> {
   FutureOr<void> build();

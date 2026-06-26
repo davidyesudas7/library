@@ -236,7 +236,7 @@ class _AddNewBookPageState extends ConsumerState<AddNewBookPage> {
   }
 
   Widget _buildRightColumn() {
-    final categoriesAsync = ref.watch(categoriesProvider);
+    final categoriesAsync = ref.watch(categoriesProvider());
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

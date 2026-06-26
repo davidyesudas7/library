@@ -19,6 +19,7 @@ class DigitalLibraryApp extends ConsumerWidget {
     final router = ref.watch(appRouterProvider);
     return MaterialApp.router(
       title: 'Digital Library',
+      debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       themeMode: ThemeMode.light,
       routerConfig: router,

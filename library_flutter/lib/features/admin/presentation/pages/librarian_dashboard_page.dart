@@ -15,8 +15,8 @@ class LibrarianDashboardPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final booksAsync = ref.watch(booksProvider);
-    final categoriesAsync = ref.watch(categoriesProvider);
+    final booksAsync = ref.watch(filteredBooksProvider());
+    final categoriesAsync = ref.watch(categoriesProvider());
 
     return Scaffold(
       body: Row(
@@ -33,7 +33,11 @@ class LibrarianDashboardPage extends ConsumerWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildWelcomeSection(context, booksAsync, categoriesAsync),
+                          _buildWelcomeSection(
+                            context,
+                            booksAsync,
+                            categoriesAsync,
+                          ),
                           const SizedBox(height: 48),
                           _buildCurrentlyReading(context, booksAsync),
                           const SizedBox(height: 48),
@@ -52,7 +56,11 @@ class LibrarianDashboardPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildWelcomeSection(BuildContext context, AsyncValue booksAsync, AsyncValue categoriesAsync) {
+  Widget _buildWelcomeSection(
+    BuildContext context,
+    AsyncValue booksAsync,
+    AsyncValue categoriesAsync,
+  ) {
     int totalBooks = booksAsync.value?.length ?? 0;
     int totalCategories = categoriesAsync.value?.length ?? 0;
 
@@ -88,14 +96,14 @@ class LibrarianDashboardPage extends ConsumerWidget {
               future: client.downloadData.getTotalDownloadCount(),
               builder: (context, snapshot) {
                 return _buildStatCard(
-                  context, 
-                  'Downloads', 
-                  snapshot.hasData ? snapshot.data.toString() : '...'
+                  context,
+                  'Downloads',
+                  snapshot.hasData ? snapshot.data.toString() : '...',
                 );
               },
             ),
           ],
-        )
+        ),
       ],
     );
   }
@@ -160,7 +168,10 @@ class LibrarianDashboardPage extends ConsumerWidget {
             );
           },
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (err, stack) => Text('Error: $err', style: const TextStyle(color: AppColors.error)),
+          error: (err, stack) => Text(
+            'Error: $err',
+            style: const TextStyle(color: AppColors.error),
+          ),
         ),
       ],
     );
@@ -211,17 +222,28 @@ class LibrarianDashboardPage extends ConsumerWidget {
                 if (books.isEmpty) return const SizedBox.shrink();
                 final highlightBooks = books.take(2).toList();
                 return Row(
-                  children: highlightBooks.map<Widget>((book) => Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 16.0),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: book.imageUrl != null
-                          ? Image.network(book.imageUrl!, fit: BoxFit.cover, height: 280)
-                          : Container(height: 280, color: AppColors.surfaceContainerHigh),
-                      ),
-                    ),
-                  )).toList(),
+                  children: highlightBooks
+                      .map<Widget>(
+                        (book) => Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 16.0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: book.imageUrl != null
+                                  ? Image.network(
+                                      book.imageUrl!,
+                                      fit: BoxFit.cover,
+                                      height: 280,
+                                    )
+                                  : Container(
+                                      height: 280,
+                                      color: AppColors.surfaceContainerHigh,
+                                    ),
+                            ),
+                          ),
+                        ),
+                      )
+                      .toList(),
                 );
               },
               loading: () => const SizedBox.shrink(),

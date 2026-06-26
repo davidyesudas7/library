@@ -1,26 +1,37 @@
+import 'dart:developer';
+
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:library_client/library_client.dart';
 import '../../data/repositories/book_repository_impl.dart';
 
 part 'book_providers.g.dart';
 
-@riverpod
-Future<List<Book>> books(Ref ref) async {
-  final repository = ref.watch(bookRepositoryProvider);
-  final result = await repository.getBooks();
-  return result.fold(
-    (failure) => throw Exception(failure),
-    (books) => books,
-  );
-}
+// @riverpod
+// Future<List<Book>> books(Ref ref) async {
+//   final repository = ref.watch(bookRepositoryProvider);
+//   final result = await repository.getBooks();
+//   return result.fold(
+//     (failure) => throw Exception(failure),
+//     (books) => books,
+//   );
+// }
 
 @riverpod
-Future<List<Book>> filteredBooks(Ref ref, {int? categoryId, String? searchQuery}) async {
+Future<List<Book>> filteredBooks(
+  Ref ref, {
+  int? categoryId,
+  String? searchQuery,
+}) async {
   final repository = ref.watch(bookRepositoryProvider);
-  final result = await repository.getBooks(categoryId: categoryId, searchQuery: searchQuery);
+  final result = await repository.getBooks(
+    categoryId: categoryId,
+    searchQuery: searchQuery,
+  );
   return result.fold(
     (failure) => throw Exception(failure),
-    (books) => books,
+    (books) {
+      return books;
+    },
   );
 }
 
@@ -37,7 +48,7 @@ class BookNotifier extends _$BookNotifier {
       return result.fold(
         (failure) => throw Exception(failure),
         (_) {
-          ref.invalidate(booksProvider);
+          ref.invalidate(filteredBooksProvider);
           return;
         },
       );
@@ -52,7 +63,7 @@ class BookNotifier extends _$BookNotifier {
       return result.fold(
         (failure) => throw Exception(failure),
         (_) {
-          ref.invalidate(booksProvider);
+          ref.invalidate(filteredBooksProvider);
           return;
         },
       );
@@ -67,7 +78,7 @@ class BookNotifier extends _$BookNotifier {
       return result.fold(
         (failure) => throw Exception(failure),
         (_) {
-          ref.invalidate(booksProvider);
+          ref.invalidate(filteredBooksProvider);
           return;
         },
       );

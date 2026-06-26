@@ -6,6 +6,18 @@ class CategoryEndpoint extends Endpoint {
     return await Category.db.find(session);
   }
 
+  Future<List<Category>> searchCategories(
+    Session session,
+    String query,
+  ) async {
+    final result = await Category.db.find(
+      session,
+      where: (t) => t.name.ilike('%$query%'),
+    );
+    session.log("the search result is $result");
+    return result;
+  }
+
   Future<Category> create(Session session, Category category) async {
     return await Category.db.insertRow(session, category);
   }
