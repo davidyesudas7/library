@@ -19,11 +19,12 @@ import 'package:serverpod_auth_idp_server/serverpod_auth_idp_server.dart'
 import 'book.dart' as _i5;
 import 'category.dart' as _i6;
 import 'download_data.dart' as _i7;
-import 'package:library_server/src/generated/book.dart' as _i8;
+import 'paginated_books.dart' as _i8;
 import 'package:library_server/src/generated/category.dart' as _i9;
 export 'book.dart';
 export 'category.dart';
 export 'download_data.dart';
+export 'paginated_books.dart';
 
 class Protocol extends _i1.SerializationManagerServer {
   Protocol._();
@@ -276,6 +277,9 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i7.DownloadedBook) {
       return _i7.DownloadedBook.fromJson(data) as T;
     }
+    if (t == _i8.PaginatedBooks) {
+      return _i8.PaginatedBooks.fromJson(data) as T;
+    }
     if (t == _i1.getType<_i5.Book?>()) {
       return (data != null ? _i5.Book.fromJson(data) : null) as T;
     }
@@ -285,8 +289,11 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i1.getType<_i7.DownloadedBook?>()) {
       return (data != null ? _i7.DownloadedBook.fromJson(data) : null) as T;
     }
-    if (t == List<_i8.Book>) {
-      return (data as List).map((e) => deserialize<_i8.Book>(e)).toList() as T;
+    if (t == _i1.getType<_i8.PaginatedBooks?>()) {
+      return (data != null ? _i8.PaginatedBooks.fromJson(data) : null) as T;
+    }
+    if (t == List<_i5.Book>) {
+      return (data as List).map((e) => deserialize<_i5.Book>(e)).toList() as T;
     }
     if (t == List<_i9.Category>) {
       return (data as List).map((e) => deserialize<_i9.Category>(e)).toList()
@@ -309,6 +316,7 @@ class Protocol extends _i1.SerializationManagerServer {
       _i5.Book => 'Book',
       _i6.Category => 'Category',
       _i7.DownloadedBook => 'DownloadedBook',
+      _i8.PaginatedBooks => 'PaginatedBooks',
       _ => null,
     };
   }
@@ -329,6 +337,8 @@ class Protocol extends _i1.SerializationManagerServer {
         return 'Category';
       case _i7.DownloadedBook():
         return 'DownloadedBook';
+      case _i8.PaginatedBooks():
+        return 'PaginatedBooks';
     }
     className = _i2.Protocol().getClassNameForObject(data);
     if (className != null) {
@@ -359,6 +369,9 @@ class Protocol extends _i1.SerializationManagerServer {
     }
     if (dataClassName == 'DownloadedBook') {
       return deserialize<_i7.DownloadedBook>(data['data']);
+    }
+    if (dataClassName == 'PaginatedBooks') {
+      return deserialize<_i8.PaginatedBooks>(data['data']);
     }
     if (dataClassName.startsWith('serverpod.')) {
       data['className'] = dataClassName.substring(10);

@@ -64,7 +64,7 @@ final class CategoriesProvider
   }
 }
 
-String _$categoriesHash() => r'2b7d41f402dbb585fd138e7a787c912639852378';
+String _$categoriesHash() => r'05793715facb2287e492ac14c69d6bfbfa3efd76';
 
 final class CategoriesFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<List<Category>>, String?> {

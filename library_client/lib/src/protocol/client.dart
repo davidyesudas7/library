@@ -12,14 +12,15 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
-import 'package:library_client/src/protocol/book.dart' as _i3;
-import 'package:library_client/src/protocol/category.dart' as _i4;
-import 'package:library_client/src/protocol/download_data.dart' as _i5;
+import 'package:library_client/src/protocol/paginated_books.dart' as _i3;
+import 'package:library_client/src/protocol/book.dart' as _i4;
+import 'package:library_client/src/protocol/category.dart' as _i5;
+import 'package:library_client/src/protocol/download_data.dart' as _i6;
 import 'package:serverpod_auth_idp_client/serverpod_auth_idp_client.dart'
-    as _i6;
-import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
     as _i7;
-import 'protocol.dart' as _i8;
+import 'package:serverpod_auth_core_client/serverpod_auth_core_client.dart'
+    as _i8;
+import 'protocol.dart' as _i9;
 
 /// {@category Endpoint}
 class EndpointBook extends _i1.EndpointRef {
@@ -28,34 +29,38 @@ class EndpointBook extends _i1.EndpointRef {
   @override
   String get name => 'book';
 
-  _i2.Future<List<_i3.Book>> getBooks(
+  _i2.Future<_i3.PaginatedBooks> getBooks(
     int? categoryId,
-    String? searchQuery,
-  ) => caller.callServerEndpoint<List<_i3.Book>>(
+    String? searchQuery, {
+    int? page,
+    int? limit,
+  }) => caller.callServerEndpoint<_i3.PaginatedBooks>(
     'book',
     'getBooks',
     {
       'categoryId': categoryId,
       'searchQuery': searchQuery,
+      'page': page,
+      'limit': limit,
     },
   );
 
-  _i2.Future<_i3.Book> create(_i3.Book book) =>
-      caller.callServerEndpoint<_i3.Book>(
+  _i2.Future<_i4.Book> create(_i4.Book book) =>
+      caller.callServerEndpoint<_i4.Book>(
         'book',
         'create',
         {'book': book},
       );
 
-  _i2.Future<_i3.Book> update(_i3.Book book) =>
-      caller.callServerEndpoint<_i3.Book>(
+  _i2.Future<_i4.Book> update(_i4.Book book) =>
+      caller.callServerEndpoint<_i4.Book>(
         'book',
         'update',
         {'book': book},
       );
 
-  _i2.Future<_i3.Book> delete(_i3.Book book) =>
-      caller.callServerEndpoint<_i3.Book>(
+  _i2.Future<_i4.Book> delete(_i4.Book book) =>
+      caller.callServerEndpoint<_i4.Book>(
         'book',
         'delete',
         {'book': book},
@@ -69,36 +74,36 @@ class EndpointCategory extends _i1.EndpointRef {
   @override
   String get name => 'category';
 
-  _i2.Future<List<_i4.Category>> getAll() =>
-      caller.callServerEndpoint<List<_i4.Category>>(
+  _i2.Future<List<_i5.Category>> getAll() =>
+      caller.callServerEndpoint<List<_i5.Category>>(
         'category',
         'getAll',
         {},
       );
 
-  _i2.Future<List<_i4.Category>> searchCategories(String query) =>
-      caller.callServerEndpoint<List<_i4.Category>>(
+  _i2.Future<List<_i5.Category>> searchCategories(String query) =>
+      caller.callServerEndpoint<List<_i5.Category>>(
         'category',
         'searchCategories',
         {'query': query},
       );
 
-  _i2.Future<_i4.Category> create(_i4.Category category) =>
-      caller.callServerEndpoint<_i4.Category>(
+  _i2.Future<_i5.Category> create(_i5.Category category) =>
+      caller.callServerEndpoint<_i5.Category>(
         'category',
         'create',
         {'category': category},
       );
 
-  _i2.Future<_i4.Category> update(_i4.Category category) =>
-      caller.callServerEndpoint<_i4.Category>(
+  _i2.Future<_i5.Category> update(_i5.Category category) =>
+      caller.callServerEndpoint<_i5.Category>(
         'category',
         'update',
         {'category': category},
       );
 
-  _i2.Future<_i4.Category> delete(_i4.Category category) =>
-      caller.callServerEndpoint<_i4.Category>(
+  _i2.Future<_i5.Category> delete(_i5.Category category) =>
+      caller.callServerEndpoint<_i5.Category>(
         'category',
         'delete',
         {'category': category},
@@ -112,7 +117,7 @@ class EndpointDownloadData extends _i1.EndpointRef {
   @override
   String get name => 'downloadData';
 
-  _i2.Future<void> saveDownloadRequest(_i5.DownloadedBook downloadedBook) =>
+  _i2.Future<void> saveDownloadRequest(_i6.DownloadedBook downloadedBook) =>
       caller.callServerEndpoint<void>(
         'downloadData',
         'saveDownloadRequest',
@@ -134,7 +139,7 @@ class EndpointDownloadData extends _i1.EndpointRef {
 }
 
 /// {@category Endpoint}
-class EndpointEmailIdp extends _i6.EndpointEmailIdpBase {
+class EndpointEmailIdp extends _i7.EndpointEmailIdpBase {
   EndpointEmailIdp(_i1.EndpointCaller caller) : super(caller);
 
   @override
@@ -150,10 +155,10 @@ class EndpointEmailIdp extends _i6.EndpointEmailIdpBase {
   ///
   /// Throws an [AuthUserBlockedException] if the auth user is blocked.
   @override
-  _i2.Future<_i7.AuthSuccess> login({
+  _i2.Future<_i8.AuthSuccess> login({
     required String email,
     required String password,
-  }) => caller.callServerEndpoint<_i7.AuthSuccess>(
+  }) => caller.callServerEndpoint<_i8.AuthSuccess>(
     'emailIdp',
     'login',
     {
@@ -218,10 +223,10 @@ class EndpointEmailIdp extends _i6.EndpointEmailIdpBase {
   ///
   /// Returns a session for the newly created user.
   @override
-  _i2.Future<_i7.AuthSuccess> finishRegistration({
+  _i2.Future<_i8.AuthSuccess> finishRegistration({
     required String registrationToken,
     required String password,
-  }) => caller.callServerEndpoint<_i7.AuthSuccess>(
+  }) => caller.callServerEndpoint<_i8.AuthSuccess>(
     'emailIdp',
     'finishRegistration',
     {
@@ -316,7 +321,7 @@ class EndpointEmailIdp extends _i6.EndpointEmailIdpBase {
 /// By extending [RefreshJwtTokensEndpoint], the JWT token refresh endpoint
 /// is made available on the server and enables automatic token refresh on the client.
 /// {@category Endpoint}
-class EndpointJwtRefresh extends _i7.EndpointRefreshJwtTokens {
+class EndpointJwtRefresh extends _i8.EndpointRefreshJwtTokens {
   EndpointJwtRefresh(_i1.EndpointCaller caller) : super(caller);
 
   @override
@@ -341,9 +346,9 @@ class EndpointJwtRefresh extends _i7.EndpointRefreshJwtTokens {
   /// This endpoint is unauthenticated, meaning the client won't include any
   /// authentication information with the call.
   @override
-  _i2.Future<_i7.AuthSuccess> refreshAccessToken({
+  _i2.Future<_i8.AuthSuccess> refreshAccessToken({
     required String refreshToken,
-  }) => caller.callServerEndpoint<_i7.AuthSuccess>(
+  }) => caller.callServerEndpoint<_i8.AuthSuccess>(
     'jwtRefresh',
     'refreshAccessToken',
     {'refreshToken': refreshToken},
@@ -367,13 +372,13 @@ class EndpointSeed extends _i1.EndpointRef {
 
 class Modules {
   Modules(Client client) {
-    serverpod_auth_core = _i7.Caller(client);
-    serverpod_auth_idp = _i6.Caller(client);
+    serverpod_auth_core = _i8.Caller(client);
+    serverpod_auth_idp = _i7.Caller(client);
   }
 
-  late final _i7.Caller serverpod_auth_core;
+  late final _i8.Caller serverpod_auth_core;
 
-  late final _i6.Caller serverpod_auth_idp;
+  late final _i7.Caller serverpod_auth_idp;
 }
 
 class Client extends _i1.ServerpodClientShared {
@@ -396,7 +401,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
          host,
-         _i8.Protocol(),
+         _i9.Protocol(),
          securityContext: securityContext,
          streamingConnectionTimeout: streamingConnectionTimeout,
          connectionTimeout: connectionTimeout,

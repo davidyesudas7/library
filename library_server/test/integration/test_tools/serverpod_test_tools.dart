@@ -14,11 +14,12 @@
 import 'package:serverpod_test/serverpod_test.dart' as _i1;
 import 'package:serverpod/serverpod.dart' as _i2;
 import 'dart:async' as _i3;
-import 'package:library_server/src/generated/book.dart' as _i4;
-import 'package:library_server/src/generated/category.dart' as _i5;
-import 'package:library_server/src/generated/download_data.dart' as _i6;
+import 'package:library_server/src/generated/paginated_books.dart' as _i4;
+import 'package:library_server/src/generated/book.dart' as _i5;
+import 'package:library_server/src/generated/category.dart' as _i6;
+import 'package:library_server/src/generated/download_data.dart' as _i7;
 import 'package:serverpod_auth_core_server/serverpod_auth_core_server.dart'
-    as _i7;
+    as _i8;
 import 'package:library_server/src/generated/protocol.dart';
 import 'package:library_server/src/generated/endpoints.dart';
 export 'package:serverpod_test/serverpod_test_public_exports.dart';
@@ -190,11 +191,13 @@ class _BookEndpoint {
 
   final _i2.SerializationManager _serializationManager;
 
-  _i3.Future<List<_i4.Book>> getBooks(
+  _i3.Future<_i4.PaginatedBooks> getBooks(
     _i1.TestSessionBuilder sessionBuilder,
     int? categoryId,
-    String? searchQuery,
-  ) async {
+    String? searchQuery, {
+    int? page,
+    int? limit,
+  }) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
           (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
@@ -209,6 +212,8 @@ class _BookEndpoint {
           parameters: _i1.testObjectToJson({
             'categoryId': categoryId,
             'searchQuery': searchQuery,
+            'page': page,
+            'limit': limit,
           }),
           serializationManager: _serializationManager,
         );
@@ -217,7 +222,7 @@ class _BookEndpoint {
                   _localUniqueSession,
                   _localCallContext.arguments,
                 )
-                as _i3.Future<List<_i4.Book>>);
+                as _i3.Future<_i4.PaginatedBooks>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -225,9 +230,9 @@ class _BookEndpoint {
     });
   }
 
-  _i3.Future<_i4.Book> create(
+  _i3.Future<_i5.Book> create(
     _i1.TestSessionBuilder sessionBuilder,
-    _i4.Book book,
+    _i5.Book book,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -248,7 +253,7 @@ class _BookEndpoint {
                   _localUniqueSession,
                   _localCallContext.arguments,
                 )
-                as _i3.Future<_i4.Book>);
+                as _i3.Future<_i5.Book>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -256,9 +261,9 @@ class _BookEndpoint {
     });
   }
 
-  _i3.Future<_i4.Book> update(
+  _i3.Future<_i5.Book> update(
     _i1.TestSessionBuilder sessionBuilder,
-    _i4.Book book,
+    _i5.Book book,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -279,7 +284,7 @@ class _BookEndpoint {
                   _localUniqueSession,
                   _localCallContext.arguments,
                 )
-                as _i3.Future<_i4.Book>);
+                as _i3.Future<_i5.Book>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -287,9 +292,9 @@ class _BookEndpoint {
     });
   }
 
-  _i3.Future<_i4.Book> delete(
+  _i3.Future<_i5.Book> delete(
     _i1.TestSessionBuilder sessionBuilder,
-    _i4.Book book,
+    _i5.Book book,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -310,7 +315,7 @@ class _BookEndpoint {
                   _localUniqueSession,
                   _localCallContext.arguments,
                 )
-                as _i3.Future<_i4.Book>);
+                as _i3.Future<_i5.Book>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -329,7 +334,7 @@ class _CategoryEndpoint {
 
   final _i2.SerializationManager _serializationManager;
 
-  _i3.Future<List<_i5.Category>> getAll(
+  _i3.Future<List<_i6.Category>> getAll(
     _i1.TestSessionBuilder sessionBuilder,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
@@ -351,7 +356,7 @@ class _CategoryEndpoint {
                   _localUniqueSession,
                   _localCallContext.arguments,
                 )
-                as _i3.Future<List<_i5.Category>>);
+                as _i3.Future<List<_i6.Category>>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -359,7 +364,7 @@ class _CategoryEndpoint {
     });
   }
 
-  _i3.Future<List<_i5.Category>> searchCategories(
+  _i3.Future<List<_i6.Category>> searchCategories(
     _i1.TestSessionBuilder sessionBuilder,
     String query,
   ) async {
@@ -382,7 +387,7 @@ class _CategoryEndpoint {
                   _localUniqueSession,
                   _localCallContext.arguments,
                 )
-                as _i3.Future<List<_i5.Category>>);
+                as _i3.Future<List<_i6.Category>>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -390,9 +395,9 @@ class _CategoryEndpoint {
     });
   }
 
-  _i3.Future<_i5.Category> create(
+  _i3.Future<_i6.Category> create(
     _i1.TestSessionBuilder sessionBuilder,
-    _i5.Category category,
+    _i6.Category category,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -413,7 +418,7 @@ class _CategoryEndpoint {
                   _localUniqueSession,
                   _localCallContext.arguments,
                 )
-                as _i3.Future<_i5.Category>);
+                as _i3.Future<_i6.Category>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -421,9 +426,9 @@ class _CategoryEndpoint {
     });
   }
 
-  _i3.Future<_i5.Category> update(
+  _i3.Future<_i6.Category> update(
     _i1.TestSessionBuilder sessionBuilder,
-    _i5.Category category,
+    _i6.Category category,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -444,7 +449,7 @@ class _CategoryEndpoint {
                   _localUniqueSession,
                   _localCallContext.arguments,
                 )
-                as _i3.Future<_i5.Category>);
+                as _i3.Future<_i6.Category>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -452,9 +457,9 @@ class _CategoryEndpoint {
     });
   }
 
-  _i3.Future<_i5.Category> delete(
+  _i3.Future<_i6.Category> delete(
     _i1.TestSessionBuilder sessionBuilder,
-    _i5.Category category,
+    _i6.Category category,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -475,7 +480,7 @@ class _CategoryEndpoint {
                   _localUniqueSession,
                   _localCallContext.arguments,
                 )
-                as _i3.Future<_i5.Category>);
+                as _i3.Future<_i6.Category>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -496,7 +501,7 @@ class _DownloadDataEndpoint {
 
   _i3.Future<void> saveDownloadRequest(
     _i1.TestSessionBuilder sessionBuilder,
-    _i6.DownloadedBook downloadedBook,
+    _i7.DownloadedBook downloadedBook,
   ) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -597,7 +602,7 @@ class _EmailIdpEndpoint {
 
   final _i2.SerializationManager _serializationManager;
 
-  _i3.Future<_i7.AuthSuccess> login(
+  _i3.Future<_i8.AuthSuccess> login(
     _i1.TestSessionBuilder sessionBuilder, {
     required String email,
     required String password,
@@ -624,7 +629,7 @@ class _EmailIdpEndpoint {
                   _localUniqueSession,
                   _localCallContext.arguments,
                 )
-                as _i3.Future<_i7.AuthSuccess>);
+                as _i3.Future<_i8.AuthSuccess>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -698,7 +703,7 @@ class _EmailIdpEndpoint {
     });
   }
 
-  _i3.Future<_i7.AuthSuccess> finishRegistration(
+  _i3.Future<_i8.AuthSuccess> finishRegistration(
     _i1.TestSessionBuilder sessionBuilder, {
     required String registrationToken,
     required String password,
@@ -725,7 +730,7 @@ class _EmailIdpEndpoint {
                   _localUniqueSession,
                   _localCallContext.arguments,
                 )
-                as _i3.Future<_i7.AuthSuccess>);
+                as _i3.Future<_i8.AuthSuccess>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -873,7 +878,7 @@ class _JwtRefreshEndpoint {
 
   final _i2.SerializationManager _serializationManager;
 
-  _i3.Future<_i7.AuthSuccess> refreshAccessToken(
+  _i3.Future<_i8.AuthSuccess> refreshAccessToken(
     _i1.TestSessionBuilder sessionBuilder, {
     required String refreshToken,
   }) async {
@@ -896,7 +901,7 @@ class _JwtRefreshEndpoint {
                   _localUniqueSession,
                   _localCallContext.arguments,
                 )
-                as _i3.Future<_i7.AuthSuccess>);
+                as _i3.Future<_i8.AuthSuccess>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();

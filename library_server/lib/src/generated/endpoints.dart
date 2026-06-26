@@ -83,6 +83,16 @@ class Endpoints extends _i1.EndpointDispatch {
               type: _i1.getType<String?>(),
               nullable: true,
             ),
+            'page': _i1.ParameterDescription(
+              name: 'page',
+              type: _i1.getType<int?>(),
+              nullable: true,
+            ),
+            'limit': _i1.ParameterDescription(
+              name: 'limit',
+              type: _i1.getType<int?>(),
+              nullable: true,
+            ),
           },
           call:
               (
@@ -92,6 +102,8 @@ class Endpoints extends _i1.EndpointDispatch {
                 session,
                 params['categoryId'],
                 params['searchQuery'],
+                page: params['page'],
+                limit: params['limit'],
               ),
         ),
         'create': _i1.MethodConnector(

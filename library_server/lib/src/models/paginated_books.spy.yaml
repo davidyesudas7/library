@@ -1,0 +1,6 @@
+class: PaginatedBooks
+fields:
+  totalBooks: int
+  currentPage: int
+  booksPerPage: int
+  books: List<Book>
