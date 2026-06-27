@@ -50,7 +50,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Academia Library',
+          'St.Peters Library',
           style: TextStyle(fontFamily: 'EB Garamond'),
         ),
         actions: [

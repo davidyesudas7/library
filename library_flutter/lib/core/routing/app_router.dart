@@ -10,7 +10,6 @@ import '../../features/admin/presentation/pages/manage_catalog_page.dart';
 import '../../features/admin/presentation/pages/manage_category_page.dart';
 import '../../features/admin/presentation/pages/add_new_book_page.dart';
 import '../../features/library/presentation/pages/book_detail_page.dart';
-import '../network/serverpod_client.dart';
 
 part 'app_router.g.dart';
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:library_client/library_client.dart';
 import 'package:library_flutter/core/network/api_client.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -16,7 +18,9 @@ class BookRemoteDataSource {
   BookRemoteDataSource(this._client);
 
   Future<List<Book>> getBooks({int? categoryId, String? searchQuery}) async {
-    return (await _client.book.getBooks(categoryId, searchQuery)).books;
+    final books = (await _client.book.getBooks(categoryId, searchQuery)).books;
+    log("the books are $books");
+    return books;
   }
 
   Future<Book> createBook(Book book) async {

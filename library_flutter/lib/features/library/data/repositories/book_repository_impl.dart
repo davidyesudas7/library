@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:library_client/library_client.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -28,7 +30,8 @@ class BookRepositoryImpl implements BookRepository {
         searchQuery: searchQuery,
       );
       return Right(books);
-    } catch (e) {
+    } catch (e, stack) {
+      log("the error is $e , and the error stacktrace is $stack");
       return Left('Failed to fetch books: \${e.toString()}');
     }
   }
